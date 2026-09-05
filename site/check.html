@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bot Lock Check — Interactive AI agent security self-assessment</title>
+<meta name="description" content="Free Bot Lock Check: score your AI agents against weighted themes — prompt injection, audit, least privilege, MCP supply chain, and more. Works offline in your browser." />
+<link rel="canonical" href="https://clawlock-security.netlify.app/check.html" />
+<meta name="theme-color" content="#0b1220" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1220'/%3E%3Crect x='8' y='14' width='16' height='11' rx='2' fill='none' stroke='%232dd4bf' stroke-width='2'/%3E%3Cpath d='M11 14v-3a5 5 0 0 1 10 0v3' fill='none' stroke='%2338bdf8' stroke-width='2'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0b1220;
+  --bg2:#0f1a2e;
+  --panel:#132038;
+  --panel2:#182844;
+  --line:#243552;
+  --line2:#2f4568;
+  --ink:#e8eef8;
+  --muted:#93a4bd;
+  --faint:#6d7f9a;
+  --teal:#2dd4bf;
+  --teal2:#14b8a6;
+  --blue:#38bdf8;
+  --blue2:#0ea5e9;
+  --slate:#64748b;
+  --good:#34d399;
+  --warn:#fbbf24;
+  --bad:#f87171;
+  --grad:linear-gradient(135deg,#14b8a6 0%,#0ea5e9 55%,#6366f1 100%);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:600;letter-spacing:-.02em;line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.muted{color:var(--muted)}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
+nav{position:sticky;top:0;z-index:40;background:rgba(11,18,32,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.navrow{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.01em}
+.brand .mark{width:28px;height:28px;border-radius:8px;background:var(--grad);display:grid;place-items:center;box-shadow:0 0 24px rgba(45,212,191,.25)}
+.brand .mark svg{width:16px;height:16px}
+.navlinks{display:flex;align-items:center;gap:22px;font-size:14px;color:var(--muted)}
+.navlinks a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:500;border:1px solid transparent;transition:.15s ease;cursor:pointer}
+.btn-primary{background:var(--grad);color:#041018;border:none;box-shadow:0 8px 28px rgba(14,165,233,.22)}
+.btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border-color:var(--line2);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-sm{padding:8px 14px;font-size:13px}
+hero{display:block;padding:72px 0 56px;position:relative;overflow:hidden}
+hero::before{content:"";position:absolute;inset:-20% -10% auto;height:420px;background:radial-gradient(ellipse at 30% 40%,rgba(45,212,191,.16),transparent 55%),radial-gradient(ellipse at 70% 30%,rgba(14,165,233,.14),transparent 50%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;position:relative}
+h1{font-size:clamp(2.2rem,4.5vw,3.4rem);margin:14px 0 18px}
+.lede{font-size:1.125rem;color:var(--muted);max-width:540px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.card.glow{box-shadow:0 0 0 1px rgba(45,212,191,.12),0 24px 60px rgba(0,0,0,.35)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat b{display:block;font-family:"IBM Plex Mono",monospace;font-size:1.25rem;color:var(--teal)}
+.stat span{font-size:12px;color:var(--muted)}
+section{padding:64px 0}
+.section-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:640px}
+h2{font-size:clamp(1.6rem,3vw,2.15rem)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.feature h3{font-size:1.15rem;margin:10px 0 8px}
+.feature p{color:var(--muted);font-size:.95rem}
+.icon{width:36px;height:36px;border-radius:10px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.25);display:grid;place-items:center;color:var(--teal)}
+.theme-table{width:100%;border-collapse:collapse;font-size:14px}
+.theme-table th,.theme-table td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}
+.theme-table th{color:var(--faint);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+.theme-table tr:hover td{background:rgba(45,212,191,.04)}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;min-width:80px}
+.bar>i{display:block;height:100%;background:var(--grad);border-radius:99px}
+.price{display:flex;flex-direction:column;gap:14px;height:100%}
+.price .amt{font-family:"Newsreader",serif;font-size:2.4rem;letter-spacing:-.03em}
+.price .amt small{font-size:1rem;color:var(--muted);font-family:"IBM Plex Sans",sans-serif}
+.price ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:14px;flex:1}
+.price ul li::before{content:"▹ ";color:var(--teal)}
+.price.featured{border-color:rgba(45,212,191,.45);box-shadow:0 0 0 1px rgba(45,212,191,.2),0 24px 50px rgba(0,0,0,.3);position:relative}
+.badge{position:absolute;top:14px;right:14px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:rgba(45,212,191,.15);color:var(--teal);border:1px solid rgba(45,212,191,.35);padding:4px 8px;border-radius:99px}
+.note{font-size:13px;color:var(--faint);margin-top:10px}
+footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:14px}
+.footrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.honest{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(180deg,rgba(45,212,191,.06),transparent);color:var(--muted);font-size:14px}
+@media (max-width:860px){
+  .hero-grid,.grid-3,.grid-2{grid-template-columns:1fr}
+  .navlinks{display:none}
+  .stat-row{grid-template-columns:1fr}
+}
+
+.check-layout{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;padding:40px 0 64px}
+.sticky-score{position:sticky;top:80px}
+.score-ring{width:140px;height:140px;margin:0 auto 16px;border-radius:50%;background:conic-gradient(var(--teal) calc(var(--pct)*1%), var(--line) 0);display:grid;place-items:center}
+.score-ring::before{content:"";width:112px;height:112px;border-radius:50%;background:var(--panel)}
+.score-inner{position:absolute;text-align:center}
+.score-wrap{position:relative;display:grid;place-items:center}
+.score-num{font-family:"Newsreader",serif;font-size:2.4rem;line-height:1;color:var(--ink)}
+.theme-block{margin-bottom:14px}
+.theme-block summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-weight:500}
+.theme-block summary::-webkit-details-marker{display:none}
+.theme-block[open] summary{border-radius:12px 12px 0 0;border-bottom-color:transparent}
+.theme-body{border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;padding:8px 8px 12px;background:var(--panel2)}
+.q{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:10px}
+.q:hover{background:rgba(45,212,191,.05)}
+.q label{flex:1;font-size:14px;color:var(--muted);cursor:pointer}
+.q input{margin-top:4px;accent-color:var(--teal);width:18px;height:18px}
+.weight{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--teal);letter-spacing:.04em}
+.tier{color:var(--faint)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg2)}
+.dot{width:8px;height:8px;border-radius:50%}
+@media (max-width:900px){.check-layout{grid-template-columns:1fr}.sticky-score{position:static}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap navrow">
+    <a class="brand" href="/"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#041018" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span>Bot Lock</span></a>
+    <div class="navlinks">
+      <a href="/#themes">Themes</a>
+      <a href="/check.html">Check</a>
+      <a href="/playbook.html">Playbook</a>
+      <a href="/#pricing">Pricing</a>
+      <a class="btn btn-primary btn-sm" href="/#pricing">Field Kit</a>
+    </div>
+  </div>
+</nav>
+<div class="wrap" style="padding-top:36px">
+  <div class="kicker">Free · Offline-capable</div>
+  <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem);margin:10px 0 12px">Bot Lock Check</h1>
+  <p class="muted" style="max-width:620px">Answer yes/no against weighted AI security themes. Scoring runs entirely in your browser — no account, no server. Results are guidance, not a certification.</p>
+</div>
+<div class="wrap check-layout">
+  <div id="themes"></div>
+  <aside class="sticky-score">
+    <div class="card glow">
+      <div class="kicker">Your score</div>
+      <div class="score-wrap" style="margin:18px 0">
+        <div class="score-ring" id="ring" style="--pct:0"></div>
+        <div class="score-inner" style="position:absolute">
+          <div class="score-num" id="scoreNum">0</div>
+          <div class="mono" style="font-size:11px;color:var(--muted)">/ 100</div>
+        </div>
+      </div>
+      <p id="tierLabel" class="muted" style="text-align:center;font-size:14px;margin-bottom:12px">Answer to score</p>
+      <div class="legend">
+        <span class="pill"><span class="dot" style="background:var(--bad)"></span>0–39 High risk</span>
+        <span class="pill"><span class="dot" style="background:var(--warn)"></span>40–69 Gaps</span>
+        <span class="pill"><span class="dot" style="background:var(--good)"></span>70–100 Stronger</span>
+      </div>
+      <p class="note" style="margin-top:14px">Weighted by research frequency. Unchecked = not yet in place.</p>
+      <a class="btn btn-primary btn-sm" style="width:100%;margin-top:14px" href="/#pricing">Get Field Kit playbook</a>
+      <button type="button" class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" id="resetBtn">Reset</button>
+    </div>
+  </aside>
+</div>
+<footer>
+  <div class="wrap footrow">
+    <div>
+      <strong style="color:var(--ink)">Bot Lock</strong> by AgentHive Inc.<br/>
+      Reduces agent risk. Not a magic guarantee.
+    </div>
+    <div>
+      <a href="mailto:Daniel@agenthiveinc.com">Daniel@agenthiveinc.com</a>
+    </div>
+  </div>
+</footer>
+<script>
+const THEMES = [
+  {
+    id:"prompt_injection", name:"Prompt injection / jailbreak", w:16,
+    qs:[
+      "Untrusted content (docs, email, web, RAG, tool output) is delimited and treated as data, not instructions",
+      "An AI gateway or input filter sits in front of the model for known/obfuscated injections",
+      "High-impact actions still require policy/HITL even if the model follows injected intent"
+    ]
+  },
+  {
+    id:"logging_audit", name:"Logging / monitoring / audit", w:16,
+    qs:[
+      "Prompts, tool calls, token use, and outcomes are logged for every agent session",
+      "Audit logs are tamper-evident / retained long enough for incident response",
+      "On-call can detect anomalous tool bursts or egress patterns"
+    ]
+  },
+  {
+    id:"least_privilege", name:"Least privilege / IAM", w:12,
+    qs:[
+      "Agents use task-scoped, time-bound credentials (not shared god accounts)",
+      "Each agent has a distinct non-human identity (NHI) separate from human users",
+      "Production mailbox/admin/shell access is denied by default"
+    ]
+  },
+  {
+    id:"excessive_agency", name:"Excessive agency / autonomy", w:11,
+    qs:[
+      "Max tool calls / loop iterations are capped per session",
+      "Autonomy level is explicitly tiered (suggest / read / limited write)",
+      "Spend and blast-radius caps exist and are enforced"
+    ]
+  },
+  {
+    id:"tool_abuse", name:"Agent tool abuse", w:11,
+    qs:[
+      "Tools are deny-by-default with an explicit allowlist",
+      "Tool arguments are schema-validated (no raw LLM text into SQL/shell)",
+      "Send / pay / delete / deploy require human approval"
+    ]
+  },
+  {
+    id:"mcp_supply", name:"Supply chain / MCP / plugins", w:11,
+    qs:[
+      "MCP servers and skills are allowlisted with pinned versions/hashes",
+      "Unverified community skills are blocked on sensitive hosts",
+      "Per-server credential isolation; no cross-server secret sharing"
+    ]
+  },
+  {
+    id:"secrets", name:"Secrets management", w:10,
+    qs:[
+      "Secrets are never embedded in system prompts or long-term agent memory",
+      "Credentials are vault-issued at call time with short TTL",
+      "Redaction blocks secrets from logs and exported transcripts"
+    ]
+  },
+  {
+    id:"exfil", name:"Data exfiltration / privacy", w:9,
+    qs:[
+      "Network egress for tools is allowlist-only",
+      "Output DLP checks for bulk/sensitive exfil patterns",
+      "Private IP / cloud metadata endpoints are blocked from agent runtimes"
+    ]
+  },
+  {
+    id:"guardrails", name:"Guardrails / I/O filtering", w:9,
+    qs:[
+      "Input and output filters exist outside the model (gateway/policy layer)",
+      "Policy engine can deny actions even when the model complies with attacker",
+      "Instruction hierarchy separates system, user, and retrieved content"
+    ]
+  },
+  {
+    id:"token_deleg", name:"Token delegation / OAuth", w:9,
+    qs:[
+      "OAuth/token exchange binds audience; no bearer passthrough across agents",
+      "Path-aware authorization checks who called whom for what",
+      "Revocation is tested: revoked tokens fail on next tool call"
+    ]
+  }
+];
+
+const root = document.getElementById("themes");
+THEMES.forEach((t, ti) => {
+  const det = document.createElement("details");
+  det.className = "theme-block";
+  det.open = ti < 3;
+  const doneId = `done-${t.id}`;
+  det.innerHTML = `<summary><span>${t.name}</span><span class="weight">${t.w}/20</span></summary><div class="theme-body" id="${t.id}"></div>`;
+  root.appendChild(det);
+  const body = det.querySelector(".theme-body");
+  t.qs.forEach((q, qi) => {
+    const id = `${t.id}_${qi}`;
+    const row = document.createElement("div");
+    row.className = "q";
+    row.innerHTML = `<input type="checkbox" id="${id}" data-w="${t.w}" data-theme="${t.id}" /><label for="${id}">${q}</label>`;
+    body.appendChild(row);
+  });
+});
+
+function score() {
+  const boxes = [...document.querySelectorAll('input[type=checkbox]')];
+  // Per-theme: fraction of checks * weight, then normalize to 100
+  let earned = 0, max = 0;
+  THEMES.forEach(t => {
+    const mine = boxes.filter(b => b.dataset.theme === t.id);
+    const on = mine.filter(b => b.checked).length;
+    earned += (on / mine.length) * t.w;
+    max += t.w;
+  });
+  const pct = max ? Math.round((earned / max) * 100) : 0;
+  document.getElementById("scoreNum").textContent = pct;
+  document.getElementById("ring").style.setProperty("--pct", pct);
+  const label = document.getElementById("tierLabel");
+  if (boxes.every(b => !b.checked)) label.textContent = "Answer to score";
+  else if (pct < 40) label.textContent = "High residual risk — prioritize Field Kit controls";
+  else if (pct < 70) label.textContent = "Meaningful gaps — tighten tools, identity, audit";
+  else label.textContent = "Stronger posture — keep verifying & regressing";
+  try { localStorage.setItem("botlock-check", JSON.stringify(boxes.map(b => b.checked))); } catch(e) {}
+}
+
+document.getElementById("themes").addEventListener("change", score);
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.querySelectorAll('input[type=checkbox]').forEach(b => b.checked = false);
+  try { localStorage.removeItem("botlock-check"); } catch(e) {}
+  score();
+});
+
+try {
+  const saved = JSON.parse(localStorage.getItem("botlock-check") || "null");
+  if (Array.isArray(saved)) {
+    [...document.querySelectorAll('input[type=checkbox]')].forEach((b,i) => { b.checked = !!saved[i]; });
+  }
+} catch(e) {}
+score();
+</script>
+</body>
+</html>

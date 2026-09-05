@@ -1,0 +1,50 @@
+# Bot Lock — Kill-switch & incident response for agent runtimes
+# Assume injection will land; break the kill chain fast.
+
+version: "1.0"
+policy_id: botlock.kill_switch
+mode: fail_closed
+
+triggers:
+  - id: anomalous_tool_burst
+    condition: "tool_calls_per_minute > threshold OR new_tool_outside_allowlist"
+  - id: exfil_pattern
+    condition: "bulk_read + external_egress within same session"
+  - id: injection_detector_high
+    condition: "gateway_score >= high OR policy_layer_deny_storm"
+  - id: hash_mismatch_mcp
+    condition: "mcp_server_hash != pinned"
+  - id: human_panic
+    condition: "operator activates kill switch"
+  - id: spend_cap
+    condition: "session_or_daily_spend >= cap"
+  - id: privilege_escalation_attempt
+    condition: "request for denied tool class or token audience mismatch"
+
+actions_ordered:
+  - freeze_new_tool_calls
+  - revoke_session_tokens
+  - cut_network_egress
+  - snapshot_audit_trail
+  - notify_oncall
+  - quarantine_agent_runtime
+  - require_human_reauth_to_resume
+
+caps:
+  daily_spend_usd: 50
+  session_spend_usd: 10
+  max_egress_bytes_per_session: 5000000
+  max_external_recipients: 0   # until HITL raises
+
+resume:
+  requires:
+    - human_approver_role: security_oncall
+    - incident_ticket_id: required
+    - root_cause_note: required
+  default: remain_quarantined
+
+audit:
+  log_trigger: true
+  log_actions: true
+  immutable: true
+  retain_days: 365

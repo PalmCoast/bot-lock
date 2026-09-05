@@ -1,0 +1,70 @@
+# Bot Lock — Deny-by-default tool policy
+# AgentHive Inc. | Defense-only runtime template
+# Principle: no tool may run unless explicitly allowed for this agent + task.
+
+version: "1.0"
+policy_id: botlock.tools.deny_by_default
+mode: deny_by_default
+
+defaults:
+  allow: []
+  deny: ["*"]
+  require_human_approval:
+    - send_email
+    - send_message
+    - payment
+    - delete
+    - deploy
+    - write_production
+    - grant_access
+    - export_bulk_data
+
+agent:
+  identity: "${AGENT_NHI_ID}"
+  max_autonomy_level: 2   # 0=suggest only, 1=read tools, 2=limited write, 3=unrestricted (forbidden in prod)
+  max_tool_calls_per_session: 40
+  max_loop_iterations: 12
+
+tools:
+  # Explicit allowlist — everything else denied
+  allow:
+    - id: search_docs
+      args_schema: { query: string, limit: int }
+      constraints:
+        max_limit: 20
+        destinations: internal_docs_only
+    - id: read_ticket
+      args_schema: { ticket_id: string }
+      constraints:
+        ticket_id_pattern: "^[A-Z]+-\\d+$"
+    - id: summarize
+      args_schema: { text: string }
+      constraints:
+        max_input_chars: 32000
+
+  deny:
+    - id: shell
+      reason: "Unrestricted shell expands blast radius; use scoped runbooks instead"
+    - id: browser_unrestricted
+      reason: "Open web browsing enables SSRF and indirect injection"
+    - id: db_admin
+      reason: "Admin DB credentials violate least privilege"
+    - id: send_email
+      reason: "High-impact; requires HITL even if later allowlisted"
+      override: human_approval_required
+
+argument_validation:
+  reject_on: [sql_concat, shell_concat, unsanitized_html]
+  never_pass_model_text_to: [shell, sql_execute, eval, code_interpreter]
+
+egress:
+  network: allowlist_only
+  allowed_hosts: []  # fill per environment
+  block_private_ranges: true
+  block_metadata_endpoints: true
+
+audit:
+  log_every_tool_call: true
+  log_args: redacted
+  log_outcome: true
+  immutable: true

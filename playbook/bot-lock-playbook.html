@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bot Lock Field Kit Playbook — AgentHive Inc.</title>
+<meta name="description" content="Operator-dense Bot Lock Field Kit playbook: identity, vault, audit, deny-by-default tools, kill switch, authorized verification V1–V10. Defense only." />
+<meta name="theme-color" content="#0b1220" />
+<style>
+  :root {
+    --bg: #f7f3e8;
+    --bg-dark: #0b1220;
+    --ink: #1a2332;
+    --ink-dark: #e8eef8;
+    --muted: #5a6a7e;
+    --teal: #0f766e;
+    --teal-bright: #2dd4bf;
+    --lime: #84cc16;
+    --panel: #fffdf7;
+    --line: #d9d2c0;
+    --code-bg: #eef2f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .banner {
+    background: var(--bg-dark);
+    color: var(--ink-dark);
+    padding: 28px 24px 24px;
+    border-bottom: 3px solid var(--teal-bright);
+  }
+  .banner-inner { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--teal-bright);
+    margin: 0 0 8px;
+  }
+  .banner h1 {
+    font-family: Georgia, "Newsreader", serif;
+    font-weight: 650;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin: 0 0 10px;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .banner p { margin: 0; color: #93a4bd; font-size: .95rem; max-width: 62ch; }
+  .note {
+    max-width: 880px;
+    margin: 18px auto 0;
+    padding: 12px 14px;
+    background: rgba(45,212,191,.12);
+    border: 1px solid rgba(45,212,191,.35);
+    border-radius: 10px;
+    color: var(--ink-dark);
+    font-size: .9rem;
+  }
+  .note strong { color: var(--lime); }
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  h2 {
+    font-family: Georgia, "Newsreader", serif;
+    font-size: 1.55rem;
+    margin: 2.2em 0 .7em;
+    padding-top: .4em;
+    border-top: 1px solid var(--line);
+    color: var(--bg-dark);
+  }
+  h2:first-of-type { border-top: none; margin-top: 1em; }
+  h3 {
+    font-family: Georgia, "Newsreader", serif;
+    font-size: 1.15rem;
+    margin: 1.5em 0 .5em;
+    color: var(--teal);
+  }
+  p { margin: 0 0 1em; }
+  a { color: var(--teal); }
+  ul, ol { margin: 0 0 1em; padding-left: 1.35em; }
+  li { margin: .28em 0; }
+  blockquote {
+    margin: 0 0 1.2em;
+    padding: 12px 16px;
+    background: var(--panel);
+    border-left: 4px solid var(--teal);
+    color: var(--muted);
+  }
+  blockquote p { margin: 0; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 2em 0; }
+  code {
+    font-family: ui-monospace, "IBM Plex Mono", monospace;
+    font-size: .88em;
+    background: var(--code-bg);
+    padding: .1em .35em;
+    border-radius: 4px;
+  }
+  pre {
+    background: var(--bg-dark);
+    color: var(--ink-dark);
+    padding: 14px 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+    border: 1px solid #243552;
+    margin: 0 0 1.2em;
+  }
+  pre code {
+    background: transparent;
+    color: var(--teal-bright);
+    padding: 0;
+    font-size: .82rem;
+    line-height: 1.45;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.3em;
+    font-size: .92rem;
+    background: var(--panel);
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    background: #e8efe9;
+    color: var(--teal);
+    font-family: ui-monospace, "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .footer {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    color: var(--muted);
+    font-size: .85rem;
+  }
+  @media print {
+    :root { --bg: #fff; --panel: #fff; }
+    body { background: #fff; font-size: 11pt; }
+    .banner { background: #0b1220; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .note { break-inside: avoid; }
+    h2, h3 { break-after: avoid; }
+    pre, table, blockquote { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+    main { padding-bottom: 24px; }
+  }
+</style>
+</head>
+<body>
+  <header class="banner">
+    <div class="banner-inner">
+      <p class="kicker">AgentHive Inc. · Field Kit · Defense only</p>
+      <h1>Bot Lock Field Kit Playbook</h1>
+      <p>Operator-dense guidance for identity, vault, audit, deny-by-default tools, MCP allowlists, and kill-switch operations. Version 2.1 · Product brand: Bot Lock.</p>
+      <div class="note"><strong>Note:</strong> Full Markdown ships in Field Kit as the canonical source (<code>BOT-LOCK-PLAYBOOK.md</code>). This HTML is the printable companion for reviews and tabletops.</div>
+    </div>
+  </header>
+  <main>
+<p><strong>AgentHive Inc.</strong> — Operator-dense, defense-only guidance for securing AI agents that use tools, MCP servers, and credentials.<br />
+<strong>Product:</strong> Bot Lock · <strong>Companion:</strong> Field Kit ($49 one-time) · <strong>Version:</strong> 2.1<br />
+<strong>Audience:</strong> Platform engineers, security operators, SRE/on-call, and agent owners who run production or staging agent systems they are authorized to control.</p>
+<blockquote>
+<p>This playbook designs, reviews, and verifies agent control planes. It does <strong>not</strong> provide exploit PoCs, attack payloads, bypass recipes, or unauthorized testing procedures. Authorized self-assessment themes align with Bot Lock Check. Red-team exploit reproduction is out of scope.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of contents</h2>
+<ol>
+<li><a href="#1-why-this-exists">Why this exists</a></li>
+<li><a href="#2-core-principles-highest-weight-first">Core principles</a></li>
+<li><a href="#3-threat-model-checklist">Threat model checklist</a></li>
+<li><a href="#4-weighted-control-catalog-defense-in-depth">Weighted control catalog</a></li>
+<li><a href="#5-policy-how-to-field-kit-yaml-templates">Policy how-to (Field Kit YAML)</a> — includes OAuth/token and exfil/I/O how-tos</li>
+<li><a href="#6-kill-switch-runbook">Kill-switch runbook</a></li>
+<li><a href="#7-authorized-verification-playbook">Authorized verification playbook</a> — includes drills V1–V10</li>
+<li><a href="#8-anti-patterns">Anti-patterns</a></li>
+<li><a href="#9-30-day-adoption--rollout-plan">30-day adoption / rollout plan</a></li>
+<li><a href="#10-sample-audit-event-shapes">Sample audit event shapes</a></li>
+<li><a href="#11-incident-vignettes">Incident vignettes</a></li>
+<li><a href="#12-honest-limits">Honest limits</a></li>
+<li><a href="#13-product-map-and-file-map">Product map and file map</a></li>
+<li><a href="#appendix-a--glossary-short">Appendices</a> — glossary, operator card, implementation notes, tabletops, Check mapping, FAQ, <strong>weekly audit ritual</strong>, <strong>on-call card</strong>, <strong>procurement / honesty FAQ</strong></li>
+</ol>
+<hr />
+<h2 id="1-why-this-exists">1. Why this exists</h2>
+<p>AI agents that read untrusted content and call tools turn <strong>text into actions</strong>. That is the product value and the security problem in the same sentence. A support agent that can open tickets, draft replies, and look up customer records is useful until a poisoned email, a malicious PDF comment, or a compromised MCP plugin rewrites its intent and those same tools become the blast radius.</p>
+<p>Operators are already shipping agents with:</p>
+<ul>
+<li><strong>Tool access</strong> — email, calendars, browsers, shells, databases, ticketing, CI/CD, payment APIs, cloud control planes.</li>
+<li><strong>MCP and plugin ecosystems</strong> — third-party servers that extend capability without going through traditional app-sec review gates.</li>
+<li><strong>Credentials and non-human identities (NHI)</strong> — service accounts, OAuth tokens, API keys, and delegated user scopes that persist longer than any single chat turn.</li>
+<li><strong>Multi-hop context</strong> — RAG corpora, long-term memory, agent-to-agent messages, and shared session state where untrusted text can persist.</li>
+</ul>
+<p>Industry educational sources (weighted themes from English operator-facing material, Mar–Sep 2026) repeatedly surface the same failure modes. Bot Lock Check and this Field Kit playbook weight controls by how often those themes appear in that research set:</p>
+<table>
+<thead>
+<tr>
+<th>Weight</th>
+<th>Theme</th>
+<th>Operator focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16/20</td>
+<td>Prompt injection / jailbreak</td>
+<td>Untrusted text as executable influence</td>
+</tr>
+<tr>
+<td>16/20</td>
+<td>Logging / monitoring / audit</td>
+<td>Assume breach; instrument everything</td>
+</tr>
+<tr>
+<td>12/20</td>
+<td>Least privilege / IAM</td>
+<td>Task-scoped, time-bound access</td>
+</tr>
+<tr>
+<td>11/20</td>
+<td>Excessive agency</td>
+<td>Cap autonomy and blast radius</td>
+</tr>
+<tr>
+<td>11/20</td>
+<td>Agent tool abuse</td>
+<td>Tools are the new attack surface</td>
+</tr>
+<tr>
+<td>11/20</td>
+<td>Supply chain / MCP / plugins</td>
+<td>Untrusted by default</td>
+</tr>
+<tr>
+<td>10/20</td>
+<td>Secrets management</td>
+<td>Vaults, not prompts</td>
+</tr>
+<tr>
+<td>9/20</td>
+<td>Data exfiltration</td>
+<td>DLP + egress controls</td>
+</tr>
+<tr>
+<td>9/20</td>
+<td>Guardrails / I/O filtering</td>
+<td>Defense outside the model</td>
+</tr>
+<tr>
+<td>9/20</td>
+<td>Token delegation / OAuth</td>
+<td>No confused-deputy passthrough</td>
+</tr>
+</tbody>
+</table>
+<h3 id="who-this-playbook-is-for">Who this playbook is for</h3>
+<ul>
+<li><strong>Agent owners</strong> who decide which tools and credentials an agent may use for a business workflow.</li>
+<li><strong>Platform / runtime operators</strong> who load policy YAML, wire audit sinks, and run kill-switch drills.</li>
+<li><strong>Security engineers</strong> who threat-model entrances, review allowlists, and score posture with Bot Lock Check.</li>
+<li><strong>On-call responders</strong> who need a halt path that fails closed without improvising under pressure.</li>
+</ul>
+<h3 id="what-operator-dense-means-here">What “operator-dense” means here</h3>
+<p>This is not a marketing brochure and not a theoretical paper. It is a working companion to the Field Kit policy templates in <code>/workspace/botlock/policies/</code>. Every major section should leave you able to: inventory something, decide a default, load or change a policy, verify a control on systems you own, or restore after a halt. Where we cannot give a universal knob (every org’s IdP and gateway differ), we give the decision criteria and the audit evidence you should expect.</p>
+<h3 id="what-this-product-is">What this product is</h3>
+<p><strong>Bot Lock</strong> by AgentHive Inc. is an AI agent security control plane mindset and Field Kit: identity discipline, vault-oriented secrets, audit trails, deny-by-default tools, and playbook-backed operations. Pricing context for this document:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Price</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bot Lock Check</td>
+<td>Free</td>
+<td>Weighted self-assessment UX</td>
+</tr>
+<tr>
+<td>Field Kit</td>
+<td>$49 one-time</td>
+<td>This playbook + policy YAML starters</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>$149</td>
+<td>Field Kit plus deeper MCP identity / vault / audit guidance path</td>
+</tr>
+</tbody>
+</table>
+<p>Brand is <strong>Bot Lock</strong> only. No monthly subscription framing appears in this Field Kit companion.</p>
+<h3 id="the-operator-problem-in-one-paragraph">The operator problem in one paragraph</h3>
+<p>Model instructions are soft. Tool APIs are hard. If you only strengthen the soft layer (“ignore malicious instructions”), a successful injection still reaches hard capabilities. Bot Lock’s bias is the opposite: treat injection as likely, put policy and identity outside the model, deny tools by default, short-live credentials, log everything that matters, and keep a kill switch that humans can engage without debating philosophy at 02:00.</p>
+<hr />
+<h2 id="2-core-principles-highest-weight-first">2. Core principles (highest weight first)</h2>
+<p>Ranked by research weight. When two controls conflict under time pressure, prefer the higher-ranked principle unless a documented exception exists.</p>
+<h3 id="21-treat-untrusted-text-as-executable-influence">2.1 Treat untrusted text as executable influence</h3>
+<p>Prompts, documents, email bodies, calendar invites, web pages, code comments, issue trackers, OCR output, RAG chunks, and <strong>tool return payloads</strong> can overwrite agent intent. Direct prompt injection (user says “ignore previous instructions”) and indirect prompt injection (content the agent fetches later contains instructions) are first-class threats, not edge cases.</p>
+<p><strong>Operator implication:</strong> Mark every content channel as trusted or untrusted. Untrusted content may be <em>summarized</em> under policy; it must not silently expand tool authority. Delimit untrusted content in orchestration; never merge it into system policy text.</p>
+<h3 id="22-assume-breach-instrument-everything">2.2 Assume breach; instrument everything</h3>
+<p>Filters rot. Novel phrasing appears. Prefer detection and response over hoping the model always refuses. Log prompts (with redaction), tool calls, identity/token issuance and use, policy decisions, and outcomes. Retain enough to reconstruct a session after an incident.</p>
+<p><strong>Operator implication:</strong> If you cannot answer “which agent, which tool, which credential, which egress host, in which order?” you do not have an agent audit trail—you have chat history.</p>
+<h3 id="23-least-privilege-for-agents-and-tools">2.3 Least privilege for agents and tools</h3>
+<p>Task-scoped, time-bound permissions beat god-mode service accounts. An agent that needs to read one ticket queue does not need org-wide mailbox admin. Over-permissioned agents convert a single injection into multi-system damage.</p>
+<p><strong>Operator implication:</strong> Separate NHIs per agent (or per agent class). Prefer short TTL tokens issued at tool-call time. Review allowlists when workflows change, not only when incidents happen.</p>
+<h3 id="24-bound-agency-capability-is-not-authorization">2.4 Bound agency; capability is not authorization</h3>
+<p>Autonomous tool chaining amplifies a single bad turn into bulk reads, sends, deletes, deploys, or spends. Cap goals, tools, loop iterations, concurrent sessions, and blast radius. A model “wanting” to help is not authorization to act.</p>
+<p><strong>Operator implication:</strong> Encode max autonomy levels in policy. Require human-in-the-loop (HITL) for high-impact action classes even if the tool is later allowlisted.</p>
+<h3 id="25-tools-are-the-attack-surface">2.5 Tools are the attack surface</h3>
+<p>Every tool—email, browser, shell, DB, ticketing, payment, MCP—extends blast radius. Validate arguments against schemas. Allowlist tools per agent. Gate dangerous actions. Never concatenate model text into SQL, shell, HTML sinks, or unrestricted code interpreters.</p>
+<p><strong>Operator implication:</strong> Maintain a tool inventory with blast-radius ratings. Deny-by-default is the Field Kit baseline (<code>deny-by-default-tools.yaml</code>).</p>
+<h3 id="26-supply-chain-and-plugins-are-untrusted-by-default">2.6 Supply chain and plugins are untrusted by default</h3>
+<p>Third-party MCP servers, skills, and plugins can ship malicious instructions, over-broad credential requests, or silent updates. Verify provenance. Pin versions and hashes. Isolate per server. Do not install arbitrary community skills on hosts that hold production credentials.</p>
+<p><strong>Operator implication:</strong> <code>mcp-allowlist.yaml</code> starts at install/connect deny. Unlisted equals denied.</p>
+<h3 id="27-secrets-never-ride-in-prompts-or-agent-memory-casually">2.7 Secrets never ride in prompts or agent memory casually</h3>
+<p>API keys, tokens, and passwords belong in vaults and short-lived issuance—not system prompts, chat transcripts, RAG corpora, or shared multi-agent memory.</p>
+<p><strong>Operator implication:</strong> Scan and scrub. Issue credentials at the broker/tool boundary. Revoke on halt.</p>
+<h3 id="28-prevent-exfiltration-as-a-primary-outcome">2.8 Prevent exfiltration as a primary outcome</h3>
+<p>A common kill-chain end state after injection is bulk read plus external egress (email, webhook, public paste, cloud object write). Apply DLP on outputs and egress allowlists on tools and networks.</p>
+<p><strong>Operator implication:</strong> Pair bulk-read detectors with egress caps. Prefer zero external recipients until HITL raises the ceiling.</p>
+<h3 id="29-defense-outside-the-model">2.9 Defense outside the model</h3>
+<p>AI gateways, policy engines, and I/O filters inspect traffic before and after the model. Model-only “please don’t” instructions are insufficient against determined or obfuscated influence.</p>
+<p><strong>Operator implication:</strong> Policy decisions must be enforceable in the runtime/orchestration layer even when the model complies with attacker intent.</p>
+<h3 id="210-separate-identity-delegation-and-trust-hops">2.10 Separate identity, delegation, and trust hops</h3>
+<p>OAuth token exchange, agent-to-agent delegation, and NHI vs human identity need explicit audiences and path-aware authorization. Token passthrough creates confused-deputy failures: Agent B acts with Agent A’s token for a purpose A never authorized.</p>
+<p><strong>Operator implication:</strong> Bind audience. Re-authorize at each hop. Log issuance and denial.</p>
+<hr />
+<h2 id="3-threat-model-checklist">3. Threat model checklist</h2>
+<p>Walk this checklist for every LLM or agent feature before production and after material changes (new tool, new MCP server, new data connector, new autonomy level). Mark assets, entrances, and blast radius explicitly. Store the result with the agent’s runbook.</p>
+<h3 id="31-assets">3.1 Assets</h3>
+<ul>
+<li>[ ] System prompts / proprietary instructions and policy text</li>
+<li>[ ] User and enterprise data (PII, customer content, regulated records)</li>
+<li>[ ] Tool credentials, OAuth tokens, API keys, NHIs</li>
+<li>[ ] Downstream systems reachable by tools (email, cloud APIs, DBs, CI/CD, browsers, payment rails)</li>
+<li>[ ] Model / RAG corpora and long-term agent memory</li>
+<li>[ ] Audit logs themselves (integrity and retention)</li>
+<li>[ ] Spend / quota budgets tied to model and tool usage</li>
+</ul>
+<p>For each asset, note: <strong>owner</strong>, <strong>sensitivity</strong>, <strong>where it appears in context</strong>, and <strong>which tools can touch it</strong>.</p>
+<h3 id="32-entrances-untrusted-input">3.2 Entrances (untrusted input)</h3>
+<ul>
+<li>[ ] Direct user chat / API messages</li>
+<li>[ ] Indirect content: docs, email, calendar, tickets, web, PDFs, images/OCR, repo comments, wiki pages</li>
+<li>[ ] Retrieved RAG chunks and tool-returned text (including error messages)</li>
+<li>[ ] Third-party MCP servers, plugins, skills, and model updates</li>
+<li>[ ] Multi-agent messages and shared context / token passthrough</li>
+<li>[ ] Operator-uploaded “few-shot” examples that may contain live secrets</li>
+<li>[ ] Scheduled triggers that pull external content without a human reading it first</li>
+</ul>
+<p>Treat every entrance as a potential instruction channel unless you have a hard boundary that strips or isolates influence.</p>
+<h3 id="33-attacker-goals-themes-defensive-framing">3.3 Attacker goals (themes — defensive framing)</h3>
+<p>Frame these as <strong>outcomes you must reduce</strong>, not recipes:</p>
+<ul>
+<li>[ ] Intent hijack via prompt injection / jailbreak themes</li>
+<li>[ ] Sensitive disclosure / system-prompt or secret leakage</li>
+<li>[ ] Tool abuse / excessive agency (send, spend, delete, deploy, grant)</li>
+<li>[ ] Data exfiltration via connectors or covert channels</li>
+<li>[ ] Insecure output handling (model text reaching SQL/shell/HTML sinks)</li>
+<li>[ ] Memory / RAG poisoning for persistence across sessions</li>
+<li>[ ] Credential theft / privilege escalation via delegation mistakes</li>
+<li>[ ] Resource abuse / cost runaway</li>
+<li>[ ] Supply-chain compromise of tools / MCP</li>
+<li>[ ] Audit blinding (logging disabled, redaction abused to hide actions)</li>
+</ul>
+<h3 id="34-trust-boundaries-to-draw">3.4 Trust boundaries to draw</h3>
+<ul>
+<li>[ ] User ↔ orchestration ↔ model</li>
+<li>[ ] Model ↔ tools / MCP</li>
+<li>[ ] Agent ↔ agent (multi-agent)</li>
+<li>[ ] Enterprise human identity ↔ non-human / agent identity</li>
+<li>[ ] Sandbox / network egress ↔ internal resources</li>
+<li>[ ] Dev / staging agents ↔ production data planes</li>
+<li>[ ] Policy change control ↔ runtime enforcement</li>
+</ul>
+<p>Document who may cross each boundary and what evidence is logged when they do.</p>
+<h3 id="35-quick-blast-radius-scoring-operator-heuristic">3.5 Quick blast-radius scoring (operator heuristic)</h3>
+<p>For each tool on an agent, score <strong>Impact × Likelihood of misuse if intent is hijacked</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Meaning</th>
+<th>Example posture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Read-only, internal, low-sensitivity</td>
+<td>Search public docs</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Read sensitive internal</td>
+<td>Read ticket with PII</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Write limited / reversible</td>
+<td>Draft (not send) email</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Irreversible or external</td>
+<td>Send email, deploy, pay</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Admin / shell / wildcard cloud</td>
+<td>Unrestricted shell, org admin API</td>
+</tr>
+</tbody>
+</table>
+<p>Anything scored 4–5 needs HITL, narrow identity, and kill-switch coverage before production.</p>
+<hr />
+<h2 id="4-weighted-control-catalog-defense-in-depth">4. Weighted control catalog (defense in depth)</h2>
+<p>Combine controls. No single filter is enough. Subsections follow research weight and operator workflow. Each control lists <strong>intent</strong>, <strong>how to implement with Field Kit bias</strong>, and <strong>evidence</strong> you should see in audit.</p>
+<h3 id="41-prompt-injection-and-content-defenses">4.1 Prompt injection and content defenses</h3>
+<p><strong>Intent:</strong> Reduce the chance that untrusted text silently becomes policy; ensure that even when influence lands, actions stay gated.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Instruction hierarchy in orchestration</strong> — System/policy text is not overwritten by user or retrieved content. Keep untrusted content in clearly delimited channels (e.g., “document body” fields) that tools and planners treat as data.</li>
+<li><strong>AI gateway / input inspection</strong> — Inspect inbound user and retrieved content for known injection patterns and obfuscation themes. Use as a signal, not as the only gate. High scores should raise friction (HITL, reduced tools), not only log.</li>
+<li><strong>Output filtering and action gating</strong> — Inspect model proposals before tool execution. The runtime decides allow/deny; the model does not self-authorize.</li>
+<li><strong>Dual-role patterns (planner vs executor)</strong> — Planner reasons over untrusted text; executor only runs allowlisted tools with schema-validated args. Planner never receives raw credentials.</li>
+<li><strong>Content trust labels</strong> — Tag sources (user, email, web, RAG, tool). Policy can forbid high-impact tools when the last N turns include untrusted labels.</li>
+<li><strong>Assume initial influence; break the kill chain</strong> — Design for “injection may land.” Break subsequent links: tool allowlist, arg validation, egress, secrets, HITL, kill switch.</li>
+</ol>
+<p><strong>Evidence:</strong> Policy deny events when untrusted content would expand tool set; gateway scores attached to session IDs; no system-prompt text in user-visible logs.</p>
+<h3 id="42-identity-authorization-and-agency">4.2 Identity, authorization, and agency</h3>
+<p><strong>Intent:</strong> Make every action attributable to an agent NHI with scoped rights; prevent “helpful” overreach.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Separate agent NHI from human identity</strong> — Humans authenticate to approve; agents act as NHIs. Mixing them breaks revocation and audit.</li>
+<li><strong>Task-scoped, time-bound credentials</strong> — Prefer issuance at tool-call time with TTL (Field Kit secrets template defaults to short TTL).</li>
+<li><strong>Autonomy levels</strong> — Encode levels (e.g., 0 suggest-only, 1 read tools, 2 limited write, 3 unrestricted forbidden in prod) in <code>deny-by-default-tools.yaml</code>.</li>
+<li><strong>HITL for high-impact classes</strong> — send, pay, delete, deploy, grant_access, export_bulk_data, write_production.</li>
+<li><strong>Session and loop caps</strong> — <code>max_tool_calls_per_session</code>, <code>max_loop_iterations</code> to stop runaway agency.</li>
+<li><strong>Path-/policy-aware authorization</strong> — Token validity ≠ permission for this resource and this action.</li>
+</ol>
+<p><strong>Evidence:</strong> Issuance logs with audience and TTL; approval records for HITL; autonomy level in agent config snapshots.</p>
+<h3 id="43-tool-least-privilege">4.3 Tool least privilege</h3>
+<p><strong>Intent:</strong> Default deny; only enable tools required for the current workflow.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Deny-by-default allowlist</strong> — Explicit <code>tools.allow</code>; everything else denied.</li>
+<li><strong>Args schemas and constraints</strong> — Types, patterns, max limits, destination constraints (e.g., internal_docs_only).</li>
+<li><strong>Hard denials for high-blast classes</strong> — Unrestricted shell, unrestricted browser, db_admin unless a separate hardened runbook exists.</li>
+<li><strong>Never pass model text to dangerous interpreters</strong> — Reject sql_concat, shell_concat, unsanitized_html; never pass model text to shell, sql_execute, eval, unrestricted code_interpreter.</li>
+<li><strong>Per-environment allowlists</strong> — Staging may allow more for testing; production stays tight. Do not copy staging allowlists wholesale.</li>
+</ol>
+<p><strong>Evidence:</strong> Every tool call logged with allow/deny decision; denied attempts visible without enabling the tool.</p>
+<h3 id="44-mcp-plugin-supply-chain">4.4 MCP / plugin supply chain</h3>
+<p><strong>Intent:</strong> Treat MCP servers like untrusted software supply chain until proven otherwise.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Install/connect deny by default</strong> — <code>mcp-allowlist.yaml</code> mode <code>allowlist_only</code>.</li>
+<li><strong>Pin version + hash</strong> — Require pinned version and <code>hash_sha256</code>; kill on mismatch.</li>
+<li><strong>Declare network and credential scope</strong> — No wildcards; no “needs shell/full filesystem” on sensitive hosts.</li>
+<li><strong>Isolate per server</strong> — Separate credentials per server; no credential passthrough between servers.</li>
+<li><strong>Owner attestation / change control</strong> — New MCP entries require owner + security review, same as adding a production dependency.</li>
+<li><strong>Runtime reconnect checks</strong> — Re-verify hash on connect; alert on drift.</li>
+</ol>
+<p><strong>Evidence:</strong> Install/connect/deny logs; hash mismatch triggers kill-switch path; allowlist diff in change tickets.</p>
+<h3 id="45-secrets-management">4.5 Secrets management</h3>
+<p><strong>Intent:</strong> Credentials never become prompt or memory residents.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Vault-only mode</strong> — Issue from vault/broker at tool-call time (<code>secrets.yaml</code>).</li>
+<li><strong>No secrets in prompts / memory / RAG</strong> — Enforce with redaction patterns and blocked exports.</li>
+<li><strong>Short-lived tokens</strong> — Default max TTL (template: 900 seconds) unless a documented exception exists.</li>
+<li><strong>Audience binding</strong> — No bearer passthrough across agents.</li>
+<li><strong>Separate NHIs; forbid shared god accounts</strong> — One shared admin bot account is an anti-pattern.</li>
+<li><strong>Redaction on detect</strong> — block_log_export, alert, scrub_context.</li>
+</ol>
+<p><strong>Evidence:</strong> Issuance and revocation logs; denied secret access events; scrub events when patterns hit context.</p>
+<h3 id="46-data-exfiltration-and-io-guardrails">4.6 Data exfiltration and I/O guardrails</h3>
+<p><strong>Intent:</strong> Make bulk read + external send hard without human approval.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Egress allowlist</strong> — Network allowlist_only; block private ranges and cloud metadata endpoints by default.</li>
+<li><strong>DLP on outputs</strong> — Detect sensitive patterns before external tools fire.</li>
+<li><strong>Bulk export as HITL class</strong> — <code>export_bulk_data</code> requires approval.</li>
+<li><strong>Recipient caps</strong> — <code>max_external_recipients: 0</code> until HITL raises.</li>
+<li><strong>Session egress byte caps</strong> — Kill-switch template includes <code>max_egress_bytes_per_session</code>.</li>
+<li><strong>Tool pairing detectors</strong> — Bulk internal read followed by external egress in one session is a kill-switch trigger theme.</li>
+</ol>
+<p><strong>Evidence:</strong> Egress deny logs; DLP hits; paired-pattern alerts; HITL tickets for exports.</p>
+<h3 id="47-token-delegation-and-oauth">4.7 Token delegation and OAuth</h3>
+<p><strong>Intent:</strong> Prevent confused-deputy and silent privilege expansion across hops.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Explicit audience on every token</strong> — Tokens for service A are rejected by service B.</li>
+<li><strong>Re-authorization on agent-to-agent handoff</strong> — Do not pass bearer tokens in shared context.</li>
+<li><strong>Narrow OAuth scopes</strong> — Prefer read-only scopes; expand only with change control.</li>
+<li><strong>Revocation on halt</strong> — Kill-switch revokes session tokens before restore debate.</li>
+<li><strong>Human approval for grant_access tools</strong> — Agents must not mint broad grants autonomously.</li>
+</ol>
+<p><strong>Evidence:</strong> Audience mismatch denials; handoff events without raw token material; revocation timestamps tied to incident IDs.</p>
+<h3 id="48-audit-and-monitoring">4.8 Audit and monitoring</h3>
+<p><strong>Intent:</strong> Reconstruct sessions; detect anomalies; feed kill-switch and postmortems.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Log every tool call</strong> — Args redacted; outcome included; immutable sink preferred.</li>
+<li><strong>Log policy decisions</strong> — Allow, deny, HITL pending, kill engaged.</li>
+<li><strong>Log identity events</strong> — Issuance, use, revocation, audience mismatch.</li>
+<li><strong>Log MCP install/connect/invoke</strong> — Supply-chain forensics.</li>
+<li><strong>Retain long enough</strong> — Kill-switch template suggests 365 days for halt events; align with your compliance floor.</li>
+<li><strong>Alert on deny storms and spend caps</strong> — Operational signal, not vanity metrics.</li>
+<li><strong>Protect log integrity</strong> — Agents should not be able to delete their own audit trail.</li>
+</ol>
+<p><strong>Evidence:</strong> Sample shapes in §10; SIEM rules mapped to trigger IDs in <code>kill-switch.yaml</code>.</p>
+<h3 id="49-isolation">4.9 Isolation</h3>
+<p><strong>Intent:</strong> Contain compromise of runtime, MCP server, or tool to a small blast radius.</p>
+<p><strong>Controls:</strong></p>
+<ol>
+<li><strong>Ephemeral / sandboxed runtimes</strong> — Prefer short-lived compute per session for high-risk agents.</li>
+<li><strong>Network isolation</strong> — Egress allowlists; no lateral movement to admin networks.</li>
+<li><strong>Per-MCP isolation</strong> — Separate process/container identity where platform allows.</li>
+<li><strong>Separate staging data</strong> — Never point experimental agents with loose tools at production data stores.</li>
+<li><strong>Quarantine on halt</strong> — Runtime freeze + egress cut as ordered actions.</li>
+</ol>
+<p><strong>Evidence:</strong> Quarantine events; network deny logs; environment tags on every audit event (<code>env: staging|prod</code>).</p>
+<hr />
+<h3 id="410-layering-order-under-time-pressure">4.10 Layering order under time pressure</h3>
+<p>When you cannot implement everything at once, add layers in this order for a tool-enabled agent already exposed to untrusted content:</p>
+<ol>
+<li>Audit on (without audit you cannot operate).  </li>
+<li>Deny-by-default tools + HITL for impact ≥ 4.  </li>
+<li>Kill switch wired and drilled.  </li>
+<li>Secrets out of prompts; short TTL.  </li>
+<li>Egress allowlist + metadata blocks.  </li>
+<li>MCP allowlist with pins/hashes.  </li>
+<li>Stronger content labeling / gateway friction.  </li>
+<li>Isolation hardening and multi-agent boundary review.</li>
+</ol>
+<p>This order privileges <strong>visibility and halt</strong>, then <strong>capability reduction</strong>, then <strong>supply chain and isolation</strong>. It matches the research weight on audit and injection while acknowledging that tools and credentials are where damage becomes real.</p>
+<h2 id="5-policy-how-to-field-kit-yaml-templates">5. Policy how-to (Field Kit YAML templates)</h2>
+<p>Field Kit ships starter policies under <code>/workspace/botlock/policies/</code> (and mirrored under the site package). They are <strong>templates</strong>: adapt hosts, hashes, spend caps, and allowlists to your environment before production.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Policy ID</th>
+<th>Mode</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>botlock.tools.deny_by_default</code></td>
+<td><code>deny_by_default</code></td>
+<td>Tool allowlist, HITL classes, arg validation, egress, audit</td>
+</tr>
+<tr>
+<td><code>secrets.yaml</code></td>
+<td><code>botlock.secrets</code></td>
+<td><code>vault_only</code></td>
+<td>No secrets in prompts/memory; short TTL; audience binding; redaction</td>
+</tr>
+<tr>
+<td><code>mcp-allowlist.yaml</code></td>
+<td><code>botlock.mcp.allowlist</code></td>
+<td><code>allowlist_only</code></td>
+<td>Pin MCP servers; isolate; kill on hash mismatch</td>
+</tr>
+<tr>
+<td><code>kill-switch.yaml</code></td>
+<td><code>botlock.kill_switch</code></td>
+<td><code>fail_closed</code></td>
+<td>Triggers, ordered halt actions, caps, resume gates</td>
+</tr>
+</tbody>
+</table>
+<h3 id="51-day-0-load-first-install">5.1 Day-0 load (first install)</h3>
+<p><strong>Goal:</strong> Land in a safe default: agents can do almost nothing until you explicitly open scope.</p>
+<ol>
+<li><strong>Inventory</strong> — List agents, tools, MCP servers, credentials, egress needs, and owners. Store inventory next to policies.</li>
+<li><strong>Copy templates</strong> into your policy repo or control-plane config store. Do not edit only a local laptop copy if production loads from git.</li>
+<li><strong>Fill placeholders</strong> — <code>${AGENT_NHI_ID}</code>, <code>${ORG}</code>, <code>REPLACE_WITH_PINNED_HASH</code>, <code>allowed_hosts</code>, spend caps.</li>
+<li><strong>Start closed</strong> — Keep <code>tools.allow</code> minimal (e.g., search_docs / read_ticket / summarize). Leave shell, unrestricted browser, and db_admin denied.</li>
+<li><strong>Wire audit sink</strong> — Confirm events reach an immutable or append-preferred store before enabling any write tools.</li>
+<li><strong>Wire kill-switch actions</strong> — Map <code>actions_ordered</code> to real runtime APIs (freeze tools, revoke tokens, cut egress, snapshot, notify, quarantine). A YAML file that nobody’s runtime reads is documentation, not a control.</li>
+<li><strong>Dry-run mode if available</strong> — If your control plane supports shadow deny (log would-deny without enforcing), run 24–72 hours, then enforce.</li>
+<li><strong>Record baseline Bot Lock Check score</strong> — Free Check gives a weighted self-assessment snapshot for later deltas.</li>
+</ol>
+<p><strong>Day-0 acceptance criteria:</strong></p>
+<ul>
+<li>Unknown tools deny with an audit event.</li>
+<li>Unknown MCP connect denies.</li>
+<li>Secret-like strings in prompts trigger scrub/alert paths in staging.</li>
+<li>Manual human_panic kill switch freezes new tool calls in a drill.</li>
+</ul>
+<h3 id="52-day-2-operations-steady-state">5.2 Day-2 operations (steady state)</h3>
+<p><strong>Daily / continuous:</strong></p>
+<ul>
+<li>Watch deny storms, HITL queue depth, spend vs caps, MCP connect failures, hash mismatch alerts.</li>
+<li>Triage false positives carefully: loosening policy is a change-controlled act, not a chat reply to the agent.</li>
+</ul>
+<p><strong>When adding a tool:</strong></p>
+<ol>
+<li>Write blast-radius score (§3.5).</li>
+<li>Add to <code>tools.allow</code> with args schema and constraints.</li>
+<li>If impact ≥ 4, keep in <code>require_human_approval</code> or equivalent.</li>
+<li>Update egress hosts if needed.</li>
+<li>Add audit dashboard panel for the new tool ID.</li>
+<li>Re-score Bot Lock Check themes for tool abuse / least privilege.</li>
+</ol>
+<p><strong>When adding an MCP server:</strong></p>
+<ol>
+<li>Obtain pinned version + hash from a trusted build pipeline.</li>
+<li>Declare network + credential scopes; reject wildcards.</li>
+<li>Isolate credentials; never share the prod vault role with an experimental MCP.</li>
+<li>Enable <code>kill_switch_on_hash_mismatch</code>.</li>
+<li>Change ticket with owner attestation.</li>
+</ol>
+<p><strong>When rotating secrets:</strong></p>
+<ul>
+<li>Prefer vault rotation jobs; confirm agents never logged raw values.</li>
+<li>Revoke old TTL families; watch denial spikes for missed re-issue wiring.</li>
+</ul>
+<h3 id="53-change-control">5.3 Change control</h3>
+<p>Treat policy like production firewall rules:</p>
+<table>
+<thead>
+<tr>
+<th>Change type</th>
+<th>Minimum gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add read-only internal tool</td>
+<td>Owner review + audit check</td>
+</tr>
+<tr>
+<td>Add write / send / deploy tool</td>
+<td>Security review + HITL + kill-switch drill for that class</td>
+</tr>
+<tr>
+<td>Add MCP server</td>
+<td>Owner attestation + hash pin + isolation review</td>
+</tr>
+<tr>
+<td>Raise spend / egress caps</td>
+<td>Security + finance/ops as applicable</td>
+</tr>
+<tr>
+<td>Disable a kill-switch trigger</td>
+<td>Explicit exception with expiry; never silent</td>
+</tr>
+<tr>
+<td>Expand OAuth scopes</td>
+<td>Identity review + audience re-bind</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Required change record fields:</strong> requester, agent IDs affected, policy diff, blast-radius note, rollback plan, evidence of audit still green.</p>
+<p><strong>Rollback:</strong> Keep previous policy version immutable. Runtime should be able to pin <code>policy_version</code>. On incident, roll back first; debate later.</p>
+<h3 id="54-mapping-yaml-knobs-to-principles">5.4 Mapping YAML knobs to principles</h3>
+<ul>
+<li><code>mode: deny_by_default</code> → principles 2.3, 2.5  </li>
+<li><code>max_autonomy_level</code> / loop caps → 2.4  </li>
+<li><code>require_human_approval</code> → 2.4, 2.8  </li>
+<li><code>argument_validation.never_pass_model_text_to</code> → 2.5, 2.9  </li>
+<li><code>egress.allowlist_only</code> + metadata blocks → 2.8, 2.9  </li>
+<li><code>vault_only</code> / <code>max_ttl_seconds</code> / <code>audience_binding</code> → 2.7, 2.10  </li>
+<li><code>mcp</code> pin + isolate + hash kill → 2.6  </li>
+<li><code>kill_switch</code> fail_closed → 2.2, 2.4  </li>
+</ul>
+<h3 id="55-environment-promotion">5.5 Environment promotion</h3>
+<p>Promote policies <strong>staging → prod</strong> with the same discipline as app deploys:</p>
+<ol>
+<li>Staging enforce for N days with production-like untrusted inputs (authorized test corpus).</li>
+<li>Diff allowlists; remove staging-only debug tools.</li>
+<li>Confirm prod NHIs and hashes (never reuse staging tokens).</li>
+<li>Run kill-switch drill in prod-equivalent runtime or carefully scoped prod drill window.</li>
+<li>Tag release with <code>policy_version</code> and Bot Lock Check score snapshot.</li>
+</ol>
+<h3 id="56-oauth-token-delegation-how-to-maps-to-secretsyaml">5.6 OAuth / token delegation how-to (maps to <code>secrets.yaml</code>)</h3>
+<p>Token mishandling turns a helpful multi-agent workflow into a confused-deputy incident. Field Kit’s <code>secrets.yaml</code> encodes the non-negotiables; this subsection is the operator how-to for wiring them.</p>
+<p><strong>Primary YAML knobs (<code>policies/secrets.yaml</code>):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Knob</th>
+<th>Template value</th>
+<th>Operator action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td><code>vault_only</code></td>
+<td>Credentials issued at tool-call time from vault/broker—not preloaded into prompts or shared memory</td>
+</tr>
+<tr>
+<td><code>rules.short_lived_tokens.max_ttl_seconds</code></td>
+<td><code>900</code></td>
+<td>Prefer ≤15 minutes unless a documented exception ticket exists</td>
+</tr>
+<tr>
+<td><code>rules.audience_binding</code></td>
+<td><code>enforce: true</code></td>
+<td>Every token has an explicit audience; service B rejects tokens minted for service A</td>
+</tr>
+<tr>
+<td><code>rules.separate_nhi</code></td>
+<td><code>enforce: true</code></td>
+<td>Agent NHI ≠ human identity; one NHI per agent (or tight agent class)</td>
+</tr>
+<tr>
+<td><code>rules.no_secrets_in_prompts</code> / <code>no_secrets_in_memory</code></td>
+<td><code>enforce: true</code></td>
+<td>Scan prompts, few-shots, RAG, and long-term memory for secret shapes</td>
+</tr>
+<tr>
+<td><code>forbidden.token_passthrough_multi_agent</code></td>
+<td>listed</td>
+<td>Handoffs pass references (ticket IDs, doc IDs), never raw bearer material</td>
+</tr>
+<tr>
+<td><code>redaction.on_detect</code></td>
+<td><code>block_log_export</code>, <code>alert</code>, <code>scrub_context</code></td>
+<td>Synthetic secret-shaped strings in staging must fire these paths</td>
+</tr>
+<tr>
+<td><code>audit.log_issuance</code> / <code>log_revocation</code> / <code>log_denied_secret_access</code></td>
+<td><code>true</code></td>
+<td>Joinable to <code>session_id</code> and <code>agent_id</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Day-0 wiring checklist (OAuth / delegation):</strong></p>
+<ol>
+<li><strong>Inventory every OAuth client</strong> used by agents: client ID, allowed scopes, redirect/audience, owning team, refresh-token policy.</li>
+<li><strong>Split clients per agent class</strong> where the IdP allows—support-triage should not share the same broad client as deploy-bot.</li>
+<li><strong>Scope floor:</strong> start read-only (<code>read_tickets</code>, <code>read_docs</code>). Write scopes (<code>send</code>, <code>modify</code>, <code>admin</code>) require change control and HITL on the corresponding tools in <code>deny-by-default-tools.yaml</code>.</li>
+<li><strong>Audience bind at issuance:</strong> vault/broker stamps <code>aud</code> (or equivalent) for the exact API host the tool will call. Runtime rejects mismatched audience before the HTTP call.</li>
+<li><strong>No refresh tokens in agent context.</strong> If refresh is required, the broker holds it; the agent receives only short-lived access tokens.</li>
+<li><strong>Handoff protocol:</strong> Agent A completes work → writes a structured task record (IDs + objective) → Agent B starts a new session, mints its own token with its own NHI and audience. Shared chat memory must not contain <code>Authorization</code> headers or token JSON.</li>
+<li><strong>Revoke-on-halt:</strong> map kill-switch action <code>revoke_session_tokens</code> to the broker’s revoke API for that session’s token family. Prove it in a staging drill.</li>
+<li><strong>Denial visibility:</strong> audience mismatch and denied secret access must produce audit events (see §10.4 style plus a deny twin). If denials are silent, you cannot operate.</li>
+</ol>
+<p><strong>Steady-state operations:</strong></p>
+<ul>
+<li>Weekly: sample 10 issuance events; confirm TTL ≤ policy max and audience matches tool host.</li>
+<li>On scope expansion: identity review + playbook §5.3 change record + Bot Lock Check re-score on token-delegation theme.</li>
+<li>On multi-agent feature launch: tabletop Exercise-style review of handoff paths (Appendix D) before prod.</li>
+<li>On halt: confirm revocation timestamps precede any restore debate.</li>
+</ul>
+<p><strong>Pass criteria for “delegation is wired”:</strong> staging shows (a) audience mismatch deny + audit, (b) handoff logs without raw bearer material, (c) halt revokes tokens within your SLO (document it—e.g., &lt; 60s).</p>
+<p><strong>Common failure modes (fix these, do not normalize them):</strong></p>
+<ul>
+<li>“Temporary” long-lived tokens left in env vars after a demo.</li>
+<li>One shared service account for all agents “until we have time.”</li>
+<li>Agent B reuses Agent A’s token because “the API already authorized us.”</li>
+<li>Logging full token responses “just in staging” that later becomes the prod log pipeline.</li>
+</ul>
+<h3 id="57-exfiltration-and-io-guardrails-how-to-maps-to-tools-kill-switch-yaml">5.7 Exfiltration and I/O guardrails how-to (maps to tools + kill-switch YAML)</h3>
+<p>Exfiltration is a primary post-injection outcome: bulk internal read, then external send. Field Kit splits prevention across <code>deny-by-default-tools.yaml</code> (egress, HITL, arg validation) and <code>kill-switch.yaml</code> (pairing trigger, caps, ordered halt).</p>
+<p><strong>Primary YAML knobs:</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Knob</th>
+<th>Operator intent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>defaults.require_human_approval</code> includes <code>export_bulk_data</code>, <code>send_email</code>, <code>send_message</code></td>
+<td>High-impact egress classes wait for a human</td>
+</tr>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>egress.network: allowlist_only</code></td>
+<td>Unlisted hosts deny</td>
+</tr>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>egress.allowed_hosts: []</code></td>
+<td>Fill per env; empty means no tool egress until you open deliberately</td>
+</tr>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>egress.block_private_ranges</code> / <code>block_metadata_endpoints</code></td>
+<td>SSRF / metadata theft themes blocked by default</td>
+</tr>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>argument_validation.never_pass_model_text_to</code></td>
+<td>Model text never becomes shell/SQL/eval input</td>
+</tr>
+<tr>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td><code>audit.log_every_tool_call</code></td>
+<td>Reconstruct read→egress sequences</td>
+</tr>
+<tr>
+<td><code>kill-switch.yaml</code></td>
+<td><code>triggers.exfil_pattern</code></td>
+<td><code>bulk_read + external_egress</code> same session → halt</td>
+</tr>
+<tr>
+<td><code>kill-switch.yaml</code></td>
+<td><code>caps.max_egress_bytes_per_session</code></td>
+<td>Template <code>5000000</code> — tune with evidence</td>
+</tr>
+<tr>
+<td><code>kill-switch.yaml</code></td>
+<td><code>caps.max_external_recipients: 0</code></td>
+<td>No external recipients until HITL raises</td>
+</tr>
+<tr>
+<td><code>kill-switch.yaml</code></td>
+<td><code>actions_ordered</code> includes <code>cut_network_egress</code></td>
+<td>Halt is not “log only”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Day-0 wiring checklist (exfil / I/O):</strong></p>
+<ol>
+<li><strong>Classify tools</strong> as internal-read, internal-write, external-egress, or admin. Only the first may start without HITL on most support/research agents.</li>
+<li><strong>Fill <code>allowed_hosts</code></strong> from workflow reality (ticket API, docs host, model endpoint)—not from agent chat requests. Use deny logs as the candidate list (§C.3).</li>
+<li><strong>Separate model-provider egress from tool egress</strong> in the network policy so a document connector cannot open arbitrary destinations.</li>
+<li><strong>Enable DLP-style output checks</strong> before external tools fire (even a simple pattern layer for known regulated markers in your org). Hits should set decision <code>deny</code> or <code>pending_human_approval</code>, never silent allow.</li>
+<li><strong>Define bulk_read</strong> operationally for your detectors (e.g., N sensitive records or M bytes from internal tools in one session). Document the threshold next to <code>exfil_pattern</code>.</li>
+<li><strong>Wire pairing alerts</strong> into the same path as kill-switch automation—or accept that humans must catch it from dashboards (weaker).</li>
+<li><strong>Recipient caps:</strong> keep <code>max_external_recipients: 0</code> until a named workflow + HITL path exists.</li>
+<li><strong>Prove cut_network_egress</strong> in staging: after halt, runtime cannot reach external hosts even if a tool call somehow remains queued.</li>
+</ol>
+<p><strong>Steady-state operations:</strong></p>
+<ul>
+<li>Watch deny storms on egress hosts and DLP hits; treat sudden allowlist expansion requests as change-control items.</li>
+<li>After adding any send/export tool: re-run authorized verification V6 and V8 (§7.6).</li>
+<li>Tune byte caps with finance/security jointly—raising caps is a security decision, not only FinOps.</li>
+<li>On suspected exfil: halt first (<code>human_panic</code> if automation quiet), then investigate with session reconstruction (§10). Do not “watch one more minute.”</li>
+</ul>
+<p><strong>Pass criteria for “exfil controls are wired”:</strong> staging shows (a) non-allowlisted host deny + audit, (b) metadata endpoint deny, (c) HITL pending for send/export fixtures you own, (d) synthetic bulk_read+egress pairing engages halt or at minimum pages with the correct trigger_id.</p>
+<p><strong>I/O filtering note:</strong> Input inspection (gateway scores, trust labels) and output gating are complementary. Labels on untrusted email/PDF/web content should raise friction on high-impact tools even when the model “sounds helpful.” Runtime policy wins over model compliance with attacker intent (principle 2.9).</p>
+<hr />
+<h2 id="6-kill-switch-runbook">6. Kill-switch runbook</h2>
+<p>Assume influence will sometimes land. The kill switch exists to <strong>break the kill chain fast</strong> and fail closed. This chapter matches <code>policies/kill-switch.yaml</code> and the companion runbook markdown if present.</p>
+<h3 id="61-purpose-and-posture">6.1 Purpose and posture</h3>
+<ul>
+<li><strong>Mode:</strong> <code>fail_closed</code></li>
+<li><strong>Bias:</strong> Prefer temporary business interruption over unbounded tool use under uncertain intent.</li>
+<li><strong>Scope:</strong> Per agent, per agent class, or fleet-wide—decide in advance and encode in runtime wiring.</li>
+</ul>
+<h3 id="62-who-can-engage">6.2 Who can engage</h3>
+<p>Define roles before the first incident:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Can engage?</th>
+<th>Can restore?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Security on-call</td>
+<td>Yes</td>
+<td>Yes (with ticket)</td>
+<td>Primary</td>
+</tr>
+<tr>
+<td>Agent owner</td>
+<td>Yes (own agents)</td>
+<td>No (recommend)</td>
+<td>Can halt; restore needs security</td>
+</tr>
+<tr>
+<td>Platform on-call</td>
+<td>Yes</td>
+<td>With security</td>
+<td>Runtime freeze / egress</td>
+</tr>
+<tr>
+<td>Automated triggers</td>
+<td>Yes</td>
+<td>No</td>
+<td>Always require human reauth to resume</td>
+</tr>
+<tr>
+<td>The agent itself</td>
+<td>No</td>
+<td>No</td>
+<td>Agents must not clear their own quarantine</td>
+</tr>
+</tbody>
+</table>
+<p>Document paging contacts and a break-glass identity stored offline from the agent vault.</p>
+<h3 id="63-triggers-from-template">6.3 Triggers (from template)</h3>
+<ul>
+<li><code>anomalous_tool_burst</code> — tool_calls_per_minute above threshold OR new tool outside allowlist  </li>
+<li><code>exfil_pattern</code> — bulk_read + external_egress in same session  </li>
+<li><code>injection_detector_high</code> — gateway_score high OR policy deny storm  </li>
+<li><code>hash_mismatch_mcp</code> — MCP hash ≠ pinned  </li>
+<li><code>human_panic</code> — operator activates kill switch  </li>
+<li><code>spend_cap</code> — session or daily spend ≥ cap  </li>
+<li><code>privilege_escalation_attempt</code> — denied tool class request OR token audience mismatch  </li>
+</ul>
+<p>Tune thresholds per environment; do not disable triggers silently.</p>
+<h3 id="64-halt-path-ordered-actions">6.4 Halt path (ordered actions)</h3>
+<p>Execute in order; do not skip revoke or snapshot because “it might be a false positive”:</p>
+<ol>
+<li><strong>freeze_new_tool_calls</strong> — In-flight calls: finish only if safe; prefer cancel when unsure.  </li>
+<li><strong>revoke_session_tokens</strong> — Invalidate short-lived tokens for the session/agent.  </li>
+<li><strong>cut_network_egress</strong> — Enforce deny on external network from that runtime.  </li>
+<li><strong>snapshot_audit_trail</strong> — Seal relevant logs to immutable storage.  </li>
+<li><strong>notify_oncall</strong> — Page with agent ID, trigger ID, last tool IDs (redacted args).  </li>
+<li><strong>quarantine_agent_runtime</strong> — Isolate compute; prevent self-healing restarts that re-load bad state.  </li>
+<li><strong>require_human_reauth_to_resume</strong> — Default remain quarantined.</li>
+</ol>
+<h3 id="65-what-happens-to-users-and-workflows">6.5 What happens to users and workflows</h3>
+<ul>
+<li>User-facing agents should return a clear, non-secretive degraded message (“temporarily unavailable for security review”) without echoing internal trigger detail that helps an attacker iterate.</li>
+<li>Queued HITL approvals pause.</li>
+<li>Scheduled jobs for the quarantined agent skip or fail closed.</li>
+<li>Sibling agents do <strong>not</strong> inherit tokens from the quarantined agent.</li>
+</ul>
+<h3 id="66-caps-template-defaults-adjust">6.6 Caps (template defaults — adjust)</h3>
+<ul>
+<li><code>daily_spend_usd: 50</code>  </li>
+<li><code>session_spend_usd: 10</code>  </li>
+<li><code>max_egress_bytes_per_session: 5000000</code>  </li>
+<li><code>max_external_recipients: 0</code> until HITL raises  </li>
+</ul>
+<p>Caps are controls, not suggestions. Hitting a cap is a successful control if halt engages.</p>
+<h3 id="67-restore-path">6.7 Restore path</h3>
+<p>Resume requires <strong>all</strong> of:</p>
+<ul>
+<li>Human approver with role <code>security_oncall</code> (or your documented equivalent)</li>
+<li><code>incident_ticket_id</code></li>
+<li><code>root_cause_note</code> (even if “false positive — threshold tune”)</li>
+<li>Confirmation that tokens were rotated if revoke fired</li>
+<li>Policy version pin (rollback if policy was the cause)</li>
+<li>Optional: Bot Lock Check re-score if control gaps found</li>
+</ul>
+<p><strong>Default:</strong> remain quarantined. Time-boxed restores for false positives still need a ticket.</p>
+<h3 id="68-drill-cadence">6.8 Drill cadence</h3>
+<ul>
+<li><strong>Day-0:</strong> human_panic drill in staging.  </li>
+<li><strong>Monthly:</strong> rotate which trigger you simulate with authorized synthetic signals (not attack PoCs).  </li>
+<li><strong>After major policy change:</strong> drill halt + restore once.  </li>
+<li>Record MTTA (engage) and MTTR (safe restore) — restore speed must not outrun verification.</li>
+</ul>
+<h3 id="69-operator-checklist-laminate-this">6.9 Operator checklist (laminate this)</h3>
+<ol>
+<li>Confirm agent ID and environment.  </li>
+<li>Engage halt (human_panic) if automation did not.  </li>
+<li>Verify freeze + revoke + egress cut in control plane UI/API.  </li>
+<li>Snapshot audit; open ticket.  </li>
+<li>Preserve runtime image/logs; do not “clean up” before snapshot.  </li>
+<li>Notify agent owner and affected business owner.  </li>
+<li>Investigate with audit events (§10).  </li>
+<li>Remediate (policy rollback, MCP remove, secret rotate).  </li>
+<li>Restore only with resume gates.  </li>
+<li>Postmortem within 72 hours for true positives; tune thresholds for false positives.</li>
+</ol>
+<hr />
+<h2 id="7-authorized-verification-playbook">7. Authorized verification playbook</h2>
+<p><strong>ONLY defensive testing on systems you own or are explicitly authorized to test.</strong><br />
+This section forbids attack PoCs, exploit payloads, bypass recipes, and unauthorized testing. It describes <strong>assessment UX themes</strong> aligned with <strong>Bot Lock Check</strong> (weighted self-assessment), not red-team exploit reproduction.</p>
+<h3 id="71-rules-of-engagement-non-negotiable">7.1 Rules of engagement (non-negotiable)</h3>
+<ul>
+<li>You must own the system or hold written authorization covering agents, tools, data, and environments in scope.</li>
+<li>Do <strong>not</strong> craft or distribute exploit payloads, jailbreak corpora for third-party systems, or step-by-step attacks.</li>
+<li>Do <strong>not</strong> test on production customer data unless authorization and privacy review explicitly allow sanitized fixtures.</li>
+<li>Prefer <strong>control evidence review</strong> and <strong>authorized staging drills</strong> over adversarial content generation.</li>
+<li>If a third party asks you to “just try to break” their agent without authorization, decline.</li>
+</ul>
+<h3 id="72-assessment-ux-themes-bot-lock-checkaligned">7.2 Assessment UX themes (Bot Lock Check–aligned)</h3>
+<p>Use these themes as a <strong>scorecard</strong>. For each theme, mark: Not started / Partial / Implemented / Evidenced in audit. Weights mirror research frequency.</p>
+<table>
+<thead>
+<tr>
+<th>Theme</th>
+<th>What “good” looks like (defensive)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt injection / content defenses</td>
+<td>Untrusted channels labeled; policy outside model; gateway signals raise friction</td>
+</tr>
+<tr>
+<td>Logging / monitoring / audit</td>
+<td>Tool, identity, policy, MCP events in immutable-ish sink; can reconstruct sessions</td>
+</tr>
+<tr>
+<td>Least privilege / IAM</td>
+<td>Per-agent NHI; task-scoped tokens; no shared god account</td>
+</tr>
+<tr>
+<td>Excessive agency</td>
+<td>Autonomy caps; loop limits; HITL on high-impact classes</td>
+</tr>
+<tr>
+<td>Agent tool abuse</td>
+<td>Deny-by-default allowlist; schema validation; dangerous sinks blocked</td>
+</tr>
+<tr>
+<td>Supply chain / MCP</td>
+<td>Allowlist, pins, hashes, isolation, connect deny for unknowns</td>
+</tr>
+<tr>
+<td>Secrets management</td>
+<td>Vault issuance; redaction; no secrets in prompts/memory</td>
+</tr>
+<tr>
+<td>Data exfiltration</td>
+<td>Egress allowlist; DLP; bulk export HITL; pairing alerts</td>
+</tr>
+<tr>
+<td>Guardrails / I/O filtering</td>
+<td>Input/output inspection; runtime enforce even if model complies with bad intent</td>
+</tr>
+<tr>
+<td>Token delegation / OAuth</td>
+<td>Audience binding; no passthrough; revoke on halt</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73-authorized-verification-procedure-control-evidence">7.3 Authorized verification procedure (control evidence)</h3>
+<p>Work top-down. Record findings in a ticket; attach policy versions and Check screenshots/export if available.</p>
+<ol>
+<li><strong>Inventory agency</strong> — List every tool, MCP server, credential, and network path; rate blast radius (§3.5). Incomplete inventory is itself a finding.</li>
+<li><strong>Policy load verification</strong> — Confirm runtime loads the intended <code>policy_version</code> for each environment. Diff intended vs effective.</li>
+<li><strong>Deny-by-default proof</strong> — In staging, request a non-allowlisted tool via normal operator test harness (not an exploit kit). Expect deny + audit event.</li>
+<li><strong>HITL proof</strong> — Exercise an approval path for a high-impact class with a harmless fixture (e.g., send to a test mailbox you own). Expect block until approval; expect audit.</li>
+<li><strong>Secrets boundary proof</strong> — Confirm vault issuance path; confirm redaction triggers on synthetic secret-shaped strings in staging prompts; confirm raw secrets never appear in logs.</li>
+<li><strong>MCP allowlist proof</strong> — Attempt connect to a non-listed server name in staging; expect deny. Verify pinned hash check on an approved server.</li>
+<li><strong>Egress proof</strong> — Confirm metadata endpoints and non-allowlisted hosts deny from the agent runtime network namespace.</li>
+<li><strong>Kill-switch drill</strong> — Engage <code>human_panic</code> in staging; walk ordered actions; practice restore with ticket.</li>
+<li><strong>Delegation proof</strong> — Confirm audience mismatch denies; confirm agent-to-agent handoff does not embed raw bearer tokens in shared context logs.</li>
+<li><strong>Regression pack (authorized)</strong> — Keep a corpus of <strong>prior findings and policy fixtures</strong> (not public exploit packs). Re-run after model, prompt, tool, or policy changes.</li>
+<li><strong>Re-score Bot Lock Check</strong> — Track deltas by theme; prioritize lowest scoring high-weight themes.</li>
+<li><strong>Basics still apply</strong> — Authn/z for humans, patching, secrets hygiene, asset inventory, backup/restore of policy repos.</li>
+</ol>
+<h3 id="74-what-this-verification-intentionally-does-not-include">7.4 What this verification intentionally does <em>not</em> include</h3>
+<ul>
+<li>Step-by-step prompt injection attacks or obfuscation recipes  </li>
+<li>Exploit PoCs against models, gateways, or MCP servers  </li>
+<li>Instructions for unauthorized access or bypassing someone else’s controls  </li>
+<li>Payload lists aimed at producing harmful tool behavior  </li>
+</ul>
+<p>If your organization has a separate authorized red team, they operate under their own ROE and legal cover; this Field Kit playbook stays on the defensive control and self-assessment side.</p>
+<h3 id="75-reporting-template-short">7.5 Reporting template (short)</h3>
+<ul>
+<li>Scope &amp; authorization reference  </li>
+<li>Agent / env / policy_version  </li>
+<li>Theme scores (Check)  </li>
+<li>Control evidence collected (pass/fail per procedure step)  </li>
+<li>Gaps with blast-radius notes  </li>
+<li>Remediation owners and due dates  </li>
+<li>Kill-switch drill result (MTTA/MTTR)  </li>
+</ul>
+<h3 id="76-authorized-verification-drills-v1v10">7.6 Authorized verification drills V1–V10</h3>
+<p>Ten concrete <strong>self-assessment / drill procedures</strong> for systems you own or are explicitly authorized to test. Each drill aligns to Bot Lock Check themes. Each lists purpose, preconditions, steps, expected evidence, and pass/fail. <strong>No exploit PoCs, payloads, attack reproduction, or unauthorized testing.</strong></p>
+<p><strong>Global preconditions for all drills:</strong> written authorization on file; staging preferred; synthetic or scrubbed fixtures only; observer records <code>agent_id</code>, <code>env</code>, <code>policy_version</code>; halt path known before you start.</p>
+<h4 id="v1-inventory-completeness-themes-least-privilege-tool-abuse-mcp-supply-chain">V1 — Inventory completeness (themes: least privilege, tool abuse, MCP supply chain)</h4>
+<p><strong>Purpose:</strong> Incomplete inventory is a finding; you cannot allowlist what you have not named.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Export or list every agent in the target env (control plane / CMDB).</li>
+<li>For each agent, list tools, MCP servers, NHIs/vault paths, egress hosts, owners, autonomy level.</li>
+<li>Mark each tool with blast-radius score (§3.5).</li>
+<li>Diff inventory against effective runtime allowlists.</li>
+</ol>
+<p><strong>Expected evidence:</strong> Inventory artifact with owners; diff ticket if runtime has tools not in inventory (or vice versa).</p>
+<p><strong>Pass:</strong> Every prod agent has an owner, NHI, policy_version, and scored tool list. <strong>Fail:</strong> Orphan agents, unknown MCP connects, or tools present in runtime but absent from inventory.</p>
+<h4 id="v2-deny-by-default-proof-themes-tool-abuse-excessive-agency">V2 — Deny-by-default proof (themes: tool abuse, excessive agency)</h4>
+<p><strong>Purpose:</strong> Prove unlisted tools cannot run.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Confirm staging <code>policy_version</code> matches intended git tag.</li>
+<li>Using your <strong>authorized operator test harness</strong> (not an exploit kit), request a tool ID that is intentionally absent from <code>tools.allow</code> (e.g., a lab-only stub name your team invented).</li>
+<li>Capture audit for that session.</li>
+</ol>
+<p><strong>Expected evidence:</strong> <code>tool.call</code> with <code>decision: deny</code>, <code>reason: not_in_allowlist</code> (or equivalent); no side effects on downstream systems.</p>
+<p><strong>Pass:</strong> Deny + audit within your logging SLO. <strong>Fail:</strong> Tool executes, or deny occurs with no audit trail.</p>
+<h4 id="v3-hitl-binding-proof-themes-excessive-agency-exfiltration">V3 — HITL binding proof (themes: excessive agency, exfiltration)</h4>
+<p><strong>Purpose:</strong> High-impact classes wait for a real human approver.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>In staging, exercise a high-impact tool path with a <strong>harmless fixture you own</strong> (e.g., send to a test mailbox under your domain, or export to a staging bucket you control).</li>
+<li>Confirm the runtime emits <code>pending_human_approval</code> (or equivalent) and does not execute until approval.</li>
+<li>Approve with a human IdP identity; confirm execution + audit of approver ID.</li>
+<li>Optionally let an approval expire; confirm deny on expiry.</li>
+</ol>
+<p><strong>Expected evidence:</strong> Approval record with human <code>approver_id</code>, tool ID, redacted args, <code>policy_version</code>; no agent self-approval path.</p>
+<p><strong>Pass:</strong> Block-until-approve works; expiry denies; agent cannot approve itself. <strong>Fail:</strong> Auto-approve, shared “approver” bot account, or missing approver identity in logs.</p>
+<h4 id="v4-secrets-boundary-proof-themes-secrets-management-audit">V4 — Secrets boundary proof (themes: secrets management, audit)</h4>
+<p><strong>Purpose:</strong> Vault issuance works; secret-shaped strings scrub; raw secrets absent from logs.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Trigger a normal allowlisted tool that requires a credential; confirm issuance event with <code>audience</code>, <code>ttl_seconds</code>, vault path reference—not raw secret.</li>
+<li>In staging only, submit a <strong>synthetic</strong> secret-shaped string in a prompt field (use obviously fake patterns your redaction already knows—never live keys).</li>
+<li>Confirm scrub/alert/block_log_export paths per <code>secrets.yaml</code>.</li>
+<li>Sample recent logs for the session; confirm no raw credential material.</li>
+</ol>
+<p><strong>Expected evidence:</strong> <code>secret.issuance</code> and <code>secrets.scrub</code> (or equivalent) events; sealed traces restricted if used (§C.4).</p>
+<p><strong>Pass:</strong> Issuance + scrub evidenced; logs clean of raw secrets. <strong>Fail:</strong> Long-lived god token in env, secrets in system prompt, or scrub silent.</p>
+<h4 id="v5-mcp-allowlist-and-pin-proof-themes-supply-chain-mcp">V5 — MCP allowlist and pin proof (themes: supply chain / MCP)</h4>
+<p><strong>Purpose:</strong> Unknown MCP cannot connect; pins/hashes matter.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Attempt connect/install of a <strong>non-listed</strong> server name in staging; expect deny + <code>mcp.connect</code> audit.</li>
+<li>On an approved allowlist entry, confirm runtime checks pinned version/hash on connect.</li>
+<li>Review change ticket for the last MCP allowlist edit (owner attestation).</li>
+</ol>
+<p><strong>Expected evidence:</strong> Deny for unknown; hash/version metadata on successful connect; attestation on file.</p>
+<p><strong>Pass:</strong> Unlisted denies; approved entry shows pin metadata; <code>kill_switch_on_hash_mismatch</code> enabled in policy. <strong>Fail:</strong> Unlisted connects, or “latest” tags allowed on sensitive hosts.</p>
+<h4 id="v6-egress-and-metadata-controls-themes-exfiltration-guardrailsio">V6 — Egress and metadata controls (themes: exfiltration, guardrails/I/O)</h4>
+<p><strong>Purpose:</strong> Network policy fails closed for non-allowlisted destinations and metadata endpoints.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>From the agent runtime network namespace (or platform egress simulator), verify a non-allowlisted external host denies.</li>
+<li>Verify cloud metadata / link-local ranges deny per <code>block_metadata_endpoints</code> / <code>block_private_ranges</code>.</li>
+<li>Confirm deny events include host and <code>agent_id</code>.</li>
+</ol>
+<p><strong>Expected evidence:</strong> Egress deny logs; empty or intentional <code>allowed_hosts</code> matching inventory.</p>
+<p><strong>Pass:</strong> Denies evidenced for both cases. <strong>Fail:</strong> Open egress, or metadata reachable from agent runtime.</p>
+<h4 id="v7-kill-switch-halt-and-restore-drill-themes-audit-excessive-agency">V7 — Kill-switch halt and restore drill (themes: audit, excessive agency)</h4>
+<p><strong>Purpose:</strong> Ordered halt works; restore requires gates.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Engage <code>human_panic</code> (or documented equivalent) on a staging agent.</li>
+<li>Verify ordered actions: freeze tools, revoke tokens, cut egress, snapshot audit, notify, quarantine.</li>
+<li>Attempt a tool call; expect freeze/deny.</li>
+<li>Walk restore only with <code>security_oncall</code> (or role), <code>incident_ticket_id</code>, and <code>root_cause_note</code>.</li>
+<li>Record MTTA (engage) and MTTR (safe restore).</li>
+</ol>
+<p><strong>Expected evidence:</strong> <code>kill_switch.engaged</code> and <code>kill_switch.restore</code> events (§10.6–10.7); ticket linkage.</p>
+<p><strong>Pass:</strong> All ordered actions observable; restore blocked without gates. <strong>Fail:</strong> “Log only” halt, tokens still valid after revoke step, or agent clears own quarantine.</p>
+<h4 id="v8-exfil-pairing-caps-posture-themes-exfiltration-logging">V8 — Exfil pairing / caps posture (themes: exfiltration, logging)</h4>
+<p><strong>Purpose:</strong> Caps and pairing detectors are real controls—not comments in YAML.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Confirm <code>max_external_recipients</code>, session egress byte cap, and spend caps are loaded in effective policy.</li>
+<li>In staging, use <strong>authorized synthetic signals</strong> your platform supports (e.g., test harness flags that mark bulk_read and external_egress) to exercise <code>exfil_pattern</code>—do not craft attack content against third parties.</li>
+<li>If harness cannot synthesize pairing, do a <strong>control review</strong>: show detector config, alert route, and last drill date; schedule engineering to add a safe synthetic trigger.</li>
+</ol>
+<p><strong>Expected evidence:</strong> Trigger ID on alert/halt, or documented gap with owner and due date; caps visible in effective config.</p>
+<p><strong>Pass:</strong> Halt or page with <code>exfil_pattern</code> (or explicit tracked gap ≤ 30 days). <strong>Fail:</strong> Caps present in git only; no detector owner.</p>
+<h4 id="v9-delegation-audience-binding-proof-themes-token-delegation-oauth">V9 — Delegation / audience binding proof (themes: token delegation / OAuth)</h4>
+<p><strong>Purpose:</strong> Audience mismatch denies; handoffs lack raw bearer passthrough.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>In staging, request a tool call with a token minted for the wrong audience (platform test mode / broker fault-injection—not stolen tokens).</li>
+<li>Expect deny + audit (<code>privilege_escalation_attempt</code> or secret access deny).</li>
+<li>Review a multi-agent handoff fixture: shared context contains references only; each agent mints its own token.</li>
+<li>Confirm halt revokes session token family (link to V7 evidence).</li>
+</ol>
+<p><strong>Expected evidence:</strong> Audience mismatch denial; handoff logs without bearer material; revocation timestamps.</p>
+<p><strong>Pass:</strong> Deny + clean handoff + revoke path evidenced. <strong>Fail:</strong> Passthrough tokens in memory/logs, or mismatch allowed.</p>
+<h4 id="v10-audit-reconstructability-check-re-score-themes-loggingmonitoringaudit-all-themes">V10 — Audit reconstructability + Check re-score (themes: logging/monitoring/audit; all themes)</h4>
+<p><strong>Purpose:</strong> You can answer who/what/when; scores track remediation.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Pick a recent staging session ID; reconstruct: tools in order, decisions, token issuance, MCP connects, policy_version, trust labels.</li>
+<li>Confirm agents cannot delete their audit events.</li>
+<li>Run Bot Lock Check; record theme scores next to prior baseline.</li>
+<li>File gaps with owners; prioritize high-weight low-score themes.</li>
+</ol>
+<p><strong>Expected evidence:</strong> Session reconstruction notes; Check export/screenshot; gap ticket list.</p>
+<p><strong>Pass:</strong> Full reconstruction without guesswork; Check deltas recorded. <strong>Fail:</strong> Missing <code>policy_version</code> / <code>session_id</code> joins, or Check not re-run after material changes.</p>
+<h3 id="77-drill-cadence-and-scoring-rollup">7.7 Drill cadence and scoring rollup</h3>
+<table>
+<thead>
+<tr>
+<th>Cadence</th>
+<th>Drills</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day-0 / new agent</td>
+<td>V1, V2, V4, V7 minimum</td>
+</tr>
+<tr>
+<td>Weekly</td>
+<td>V10 sample + weekly audit ritual (Appendix G)</td>
+</tr>
+<tr>
+<td>Monthly</td>
+<td>Rotate V3, V5, V6, V8, V9; full V7</td>
+</tr>
+<tr>
+<td>After model/prompt/tool/policy change</td>
+<td>V2 + affected theme drills + Check re-score</td>
+</tr>
+<tr>
+<td>Quarterly</td>
+<td>Full V1–V10 pack + tabletops (Appendix D)</td>
+</tr>
+</tbody>
+</table>
+<p>Roll up results into the §7.5 report template. Treat repeated fails on V2/V7/V10 as launch blockers for high-impact tools.</p>
+<hr />
+<h2 id="8-anti-patterns">8. Anti-patterns</h2>
+<p>Do not:</p>
+<ol>
+<li><strong>Rely on system-prompt wording alone</strong> (“ignore injections”) as the control. Soft instructions are not enforcement.</li>
+<li><strong>Give agents broad production credentials</strong>, mailbox admin APIs, or workstation shell “just to try.”</li>
+<li><strong>Pass bearer tokens through multi-agent context</strong> without re-authorization at each hop.</li>
+<li><strong>Concatenate model output into SQL, shell, HTML, or code interpreters</strong> without strict validation/allowlists.</li>
+<li><strong>Install unvetted MCP servers/skills</strong> from the open internet onto sensitive environments.</li>
+<li><strong>Expose high-capability agents to arbitrary internet content</strong> without isolation and egress policy.</li>
+<li><strong>Skip logging</strong> because “the model is probabilistic”—you need forensics when influence lands.</li>
+<li><strong>Equate “sandbox present” with “secure.”</strong> Sandboxes without egress policy, tool allowlists, and identity still leak or misuse APIs.</li>
+<li><strong>Prioritize only prompt-injection theater</strong> while ignoring excessive agency and over-permissioned tools.</li>
+<li><strong>Treat vendor “AI security” branding as evidence</strong> of control effectiveness—verify with authorized assessment and audit evidence.</li>
+<li><strong>Share one NHI across all agents</strong> “for convenience.”</li>
+<li><strong>Disable kill-switch triggers</strong> to silence pages without an expiry and owner.</li>
+<li><strong>Store live API keys in few-shot examples</strong>, README files, or RAG corpora.</li>
+<li><strong>Promote staging allowlists to production</strong> without stripping debug tools.</li>
+<li><strong>Let the agent clear its own quarantine</strong> or delete its audit events.</li>
+<li><strong>Confuse HITL theater with HITL</strong> — approvals that auto-approve after N seconds, or that the agent can generate, are not human control.</li>
+<li><strong>Log raw secrets “for debugging.”</strong> Use vault references and redaction.</li>
+<li><strong>Ignore tool return content</strong> as an injection entrance—returns are untrusted text too.</li>
+<li><strong>Run prod agents with autonomy level unrestricted</strong> even behind a VPN.</li>
+<li><strong>Measure only model refusal rates</strong> and declare victory while tools remain over-scoped.</li>
+</ol>
+<hr />
+<h2 id="9-30-day-adoption-rollout-plan">9. 30-day adoption / rollout plan</h2>
+<p>A pragmatic rollout for a team that already has at least one agent in staging or production. Compress if you are pre-launch; do not skip inventory or kill-switch wiring.</p>
+<h3 id="week-1-inventory-and-freeze">Week 1 — Inventory and freeze</h3>
+<p><strong>Outcomes:</strong> Known inventory; deny-by-default enforced for non-essential tools; audit on.</p>
+<ul>
+<li>Catalog agents, tools, MCP servers, credentials, egress paths, and owners.</li>
+<li>Turn on deny-by-default for tools not required this sprint (<code>deny-by-default-tools.yaml</code>).</li>
+<li>Enable full audit logging (prompts redacted, tools, tokens, outcomes).</li>
+<li>Record baseline Bot Lock Check scores.</li>
+<li>Name on-call for kill-switch and break-glass procedure.</li>
+<li>Freeze new MCP installs until allowlist process exists.</li>
+</ul>
+<p><strong>Exit criteria:</strong> Inventory doc merged; unknown tools deny in staging; audit events visible in your sink.</p>
+<h3 id="week-2-identity-and-secrets">Week 2 — Identity and secrets</h3>
+<p><strong>Outcomes:</strong> Vault path live; NHIs split; HITL on high-impact classes.</p>
+<ul>
+<li>Move secrets out of prompts into vault/short-lived issuance (<code>secrets.yaml</code>).</li>
+<li>Split NHIs per agent; bind token audiences.</li>
+<li>Add HITL for send/pay/delete/deploy/grant/export.</li>
+<li>Set autonomy levels and loop/tool-call caps.</li>
+<li>Redaction patterns enabled in staging; tune false positives carefully.</li>
+</ul>
+<p><strong>Exit criteria:</strong> No long-lived god tokens in agent env for in-scope agents; HITL path demonstrated once.</p>
+<h3 id="week-3-supply-chain-and-isolation">Week 3 — Supply chain and isolation</h3>
+<p><strong>Outcomes:</strong> MCP pinned; egress constrained; kill switch real.</p>
+<ul>
+<li>Pin and hash-allowlist MCP servers; quarantine unknowns (<code>mcp-allowlist.yaml</code>).</li>
+<li>Add network egress allowlists; block metadata endpoints and private ranges by default.</li>
+<li>Deploy kill-switch triggers and on-call path (<code>kill-switch.yaml</code>).</li>
+<li>Isolate high-risk runtimes; separate staging data from prod.</li>
+<li>Run human_panic drill; fix wiring gaps.</li>
+</ul>
+<p><strong>Exit criteria:</strong> Non-allowlisted MCP connect denies; halt drill freezes tools and revokes tokens in staging.</p>
+<h3 id="week-4-verify-and-regress">Week 4 — Verify and regress</h3>
+<p><strong>Outcomes:</strong> Authorized verification complete; regression pack started; scores improved.</p>
+<ul>
+<li>Run §7 verification on staging (authorized only).</li>
+<li>Build a regression corpus from <strong>your</strong> findings and fixtures.</li>
+<li>Score again with Bot Lock Check; track deltas by theme.</li>
+<li>Promote hardened policy to prod with change control.</li>
+<li>Schedule monthly kill-switch drill and quarterly Check re-score.</li>
+</ul>
+<p><strong>Exit criteria:</strong> Verification report filed; prod policy_version pinned; owners assigned for residual gaps.</p>
+<h3 id="day-31-backlog-common">Day 31+ backlog (common)</h3>
+<ul>
+<li>Per-workflow allowlists instead of one mega-agent  </li>
+<li>Stronger DLP classifiers for your data types  </li>
+<li>Immutable audit store / WORM if compliance requires  </li>
+<li>Multi-agent boundary review  </li>
+<li>Cost anomaly dashboards tied to spend caps  </li>
+</ul>
+<hr />
+<h2 id="10-sample-audit-event-shapes">10. Sample audit event shapes</h2>
+<p>Illustrative JSON-ish examples of <strong>good</strong> logs. Fields are suggestive; adapt to your schema. Redact secrets always.</p>
+<h3 id="101-tool-call-allowed">10.1 Tool call allowed</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:01:22Z&quot;,
+  &quot;event&quot;: &quot;tool.call&quot;,
+  &quot;decision&quot;: &quot;allow&quot;,
+  &quot;agent_id&quot;: &quot;agent.support.triage&quot;,
+  &quot;nhi_id&quot;: &quot;nhi.support.triage.prod&quot;,
+  &quot;session_id&quot;: &quot;sess_9f2a&quot;,
+  &quot;policy_id&quot;: &quot;botlock.tools.deny_by_default&quot;,
+  &quot;policy_version&quot;: &quot;2026.09.05.1&quot;,
+  &quot;tool_id&quot;: &quot;read_ticket&quot;,
+  &quot;args_redacted&quot;: {&quot;ticket_id&quot;: &quot;SUP-1234&quot;},
+  &quot;autonomy_level&quot;: 1,
+  &quot;content_trust_labels&quot;: [&quot;user&quot;, &quot;ticket_body:untrusted&quot;],
+  &quot;outcome&quot;: {&quot;status&quot;: &quot;ok&quot;, &quot;latency_ms&quot;: 180},
+  &quot;env&quot;: &quot;prod&quot;
+}
+</code></pre>
+<h3 id="102-tool-call-denied-not-on-allowlist">10.2 Tool call denied (not on allowlist)</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:02:03Z&quot;,
+  &quot;event&quot;: &quot;tool.call&quot;,
+  &quot;decision&quot;: &quot;deny&quot;,
+  &quot;reason&quot;: &quot;not_in_allowlist&quot;,
+  &quot;agent_id&quot;: &quot;agent.support.triage&quot;,
+  &quot;session_id&quot;: &quot;sess_9f2a&quot;,
+  &quot;tool_id&quot;: &quot;shell&quot;,
+  &quot;policy_version&quot;: &quot;2026.09.05.1&quot;,
+  &quot;env&quot;: &quot;prod&quot;
+}
+</code></pre>
+<h3 id="103-hitl-required">10.3 HITL required</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:05:11Z&quot;,
+  &quot;event&quot;: &quot;tool.call&quot;,
+  &quot;decision&quot;: &quot;pending_human_approval&quot;,
+  &quot;agent_id&quot;: &quot;agent.support.triage&quot;,
+  &quot;tool_id&quot;: &quot;send_email&quot;,
+  &quot;args_redacted&quot;: {&quot;to_domain&quot;: &quot;example.com&quot;, &quot;recipient_count&quot;: 1},
+  &quot;approval_id&quot;: &quot;apr_4401&quot;,
+  &quot;env&quot;: &quot;prod&quot;
+}
+</code></pre>
+<h3 id="104-secret-issuance">10.4 Secret issuance</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:06:00Z&quot;,
+  &quot;event&quot;: &quot;secret.issuance&quot;,
+  &quot;nhi_id&quot;: &quot;nhi.support.triage.prod&quot;,
+  &quot;audience&quot;: &quot;tickets.internal.example&quot;,
+  &quot;ttl_seconds&quot;: 900,
+  &quot;vault_path&quot;: &quot;agents/support/triage/ticket_ro&quot;,
+  &quot;session_id&quot;: &quot;sess_9f2a&quot;,
+  &quot;env&quot;: &quot;prod&quot;
+}
+</code></pre>
+<h3 id="105-mcp-connect-denied">10.5 MCP connect denied</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:10:44Z&quot;,
+  &quot;event&quot;: &quot;mcp.connect&quot;,
+  &quot;decision&quot;: &quot;deny&quot;,
+  &quot;reason&quot;: &quot;not_in_allowlist&quot;,
+  &quot;server_name&quot;: &quot;community-mystery-tools&quot;,
+  &quot;agent_id&quot;: &quot;agent.support.triage&quot;,
+  &quot;policy_id&quot;: &quot;botlock.mcp.allowlist&quot;,
+  &quot;env&quot;: &quot;staging&quot;
+}
+</code></pre>
+<h3 id="106-kill-switch-engaged">10.6 Kill-switch engaged</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:12:09Z&quot;,
+  &quot;event&quot;: &quot;kill_switch.engaged&quot;,
+  &quot;trigger_id&quot;: &quot;exfil_pattern&quot;,
+  &quot;agent_id&quot;: &quot;agent.support.triage&quot;,
+  &quot;session_id&quot;: &quot;sess_9f2a&quot;,
+  &quot;actions&quot;: [
+    &quot;freeze_new_tool_calls&quot;,
+    &quot;revoke_session_tokens&quot;,
+    &quot;cut_network_egress&quot;,
+    &quot;snapshot_audit_trail&quot;,
+    &quot;notify_oncall&quot;,
+    &quot;quarantine_agent_runtime&quot;
+  ],
+  &quot;incident_ticket_id&quot;: null,
+  &quot;env&quot;: &quot;prod&quot;,
+  &quot;policy_version&quot;: &quot;2026.09.05.1&quot;
+}
+</code></pre>
+<h3 id="107-kill-switch-restore">10.7 Kill-switch restore</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T19:40:00Z&quot;,
+  &quot;event&quot;: &quot;kill_switch.restore&quot;,
+  &quot;agent_id&quot;: &quot;agent.support.triage&quot;,
+  &quot;approver_role&quot;: &quot;security_oncall&quot;,
+  &quot;approver_id&quot;: &quot;human.jsmith&quot;,
+  &quot;incident_ticket_id&quot;: &quot;INC-8891&quot;,
+  &quot;root_cause_note&quot;: &quot;false_positive_threshold_tune&quot;,
+  &quot;policy_version&quot;: &quot;2026.09.05.2&quot;,
+  &quot;env&quot;: &quot;prod&quot;
+}
+</code></pre>
+<h3 id="108-redaction-scrub">10.8 Redaction / scrub</h3>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-09-05T18:07:30Z&quot;,
+  &quot;event&quot;: &quot;secrets.scrub&quot;,
+  &quot;session_id&quot;: &quot;sess_9f2a&quot;,
+  &quot;action&quot;: [&quot;scrub_context&quot;, &quot;alert&quot;],
+  &quot;pattern_id&quot;: &quot;generic_api_key_assignment&quot;,
+  &quot;env&quot;: &quot;prod&quot;
+}
+</code></pre>
+<p><strong>Operator note:</strong> Good audit trails are queryable by <code>agent_id</code>, <code>session_id</code>, <code>policy_version</code>, and <code>trigger_id</code>. If you cannot join tool calls to token issuance for the same session, fix the schema before adding more tools.</p>
+<hr />
+<h2 id="11-incident-vignettes">11. Incident vignettes</h2>
+<p>Short defensive postmortems. Each asks: <strong>what control would have reduced blast radius?</strong> No exploit detail—only outcomes and controls.</p>
+<h3 id="vignette-a-poisoned-email-body-redirects-a-support-agent">Vignette A — Poisoned email body redirects a support agent</h3>
+<p><strong>Story:</strong> A support agent with mailbox read + send permissions processed an inbound email whose body contained instruction-like text. The agent drafted and sent a reply that included internal troubleshooting notes to an external address.</p>
+<p><strong>What reduced blast radius would look like:</strong> Treat email body as untrusted content label; deny <code>send_email</code> without HITL; DLP on outbound body; egress recipient allowlist / <code>max_external_recipients: 0</code> until approval; session audit showing pending_human_approval instead of silent send.</p>
+<p><strong>Field Kit hooks:</strong> <code>deny-by-default-tools.yaml</code> HITL list; content trust labels; kill-switch if bulk read + external egress pairing appears.</p>
+<h3 id="vignette-b-community-mcp-server-drifts-after-install">Vignette B — Community MCP server drifts after install</h3>
+<p><strong>Story:</strong> An engineering helper agent installed a useful MCP server. A later update changed server behavior and requested broader credentials. The agent began calling tools outside the original workflow.</p>
+<p><strong>What reduced blast radius would look like:</strong> Pin version + hash; <code>kill_switch_on_hash_mismatch</code>; install/connect deny for drift; separate credentials per MCP; no wildcard scopes; change control for allowlist edits.</p>
+<p><strong>Field Kit hooks:</strong> <code>mcp-allowlist.yaml</code> runtime isolate + hash kill; audit <code>mcp.connect</code> denials.</p>
+<h3 id="vignette-c-long-lived-cloud-token-in-the-system-prompt">Vignette C — Long-lived cloud token in the system prompt</h3>
+<p><strong>Story:</strong> To “make demos faster,” a team pasted a cloud API key into the system prompt. The key appeared in logs and in a transcript shared with a vendor.</p>
+<p><strong>What reduced blast radius would look like:</strong> Vault-only issuance; redaction patterns; forbid embedding secrets in system prompts; short TTL; separate NHI; scrub on detect; never share raw transcripts without scanning.</p>
+<p><strong>Field Kit hooks:</strong> <code>secrets.yaml</code> rules <code>no_secrets_in_prompts</code>, redaction <code>on_detect</code>.</p>
+<h3 id="vignette-d-multi-agent-token-passthrough">Vignette D — Multi-agent token passthrough</h3>
+<p><strong>Story:</strong> Agent A obtained a user-delegated OAuth token and passed it in shared context to Agent B for “efficiency.” Agent B called a higher-impact API than A’s workflow intended.</p>
+<p><strong>What reduced blast radius would look like:</strong> Audience binding; re-authorization at handoff; no bearer passthrough; path-aware authZ; audit denials on audience mismatch; separate NHIs.</p>
+<p><strong>Field Kit hooks:</strong> <code>secrets.yaml</code> <code>audience_binding</code>; kill-switch <code>privilege_escalation_attempt</code>.</p>
+<h3 id="vignette-e-cost-runaway-from-unbounded-loops">Vignette E — Cost runaway from unbounded loops</h3>
+<p><strong>Story:</strong> A research agent entered a tool-call loop against a paid API. Spend climbed until finance noticed—without a security “incident,” but with real loss.</p>
+<p><strong>What reduced blast radius would look like:</strong> <code>max_tool_calls_per_session</code>, <code>max_loop_iterations</code>, session/daily spend caps, automated <code>spend_cap</code> halt, notify oncall.</p>
+<p><strong>Field Kit hooks:</strong> tools policy caps; <code>kill-switch.yaml</code> spend_cap trigger and ordered freeze.</p>
+<p><strong>Common thread:</strong> In each vignette, model refusal alone was insufficient. Runtime policy, identity, audit, and halt paths determined blast radius.</p>
+<hr />
+<h2 id="12-honest-limits">12. Honest limits</h2>
+<p>Bot Lock reduces agent risk when you apply layered controls. It does <strong>not</strong> guarantee:</p>
+<ul>
+<li>that no injection or influence attempt will succeed against a model;</li>
+<li>that every model will refuse harmful or out-of-policy intent;</li>
+<li>that a misconfigured allowlist, over-broad OAuth scope, or disabled kill-switch trigger is safe;</li>
+<li>that sandbox presence equals production safety;</li>
+<li>that a high Bot Lock Check score means “unhackable”—it means better weighted coverage of defensive themes;</li>
+<li>that Field Kit YAML works without wiring to a real runtime, IdP, vault, and audit sink.</li>
+</ul>
+<p>Security for agents is continuous: inventory, policy, monitoring, authorized verification, and drills. Expect to revisit allowlists when workflows change. Prefer measurable controls and audit evidence over slogans.</p>
+<p>If you need a one-line honesty clause for stakeholders: <strong>Bot Lock helps you fail closed and see what happened—it does not make probabilistic systems deterministic.</strong></p>
+<hr />
+<h2 id="13-product-map-and-file-map">13. Product map and file map</h2>
+<h3 id="131-product-map">13.1 Product map</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Price</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Free — Bot Lock Check</strong></td>
+<td>$0</td>
+<td>Interactive weighted self-assessment (<code>/check</code>) aligned to research themes</td>
+</tr>
+<tr>
+<td><strong>Field Kit</strong></td>
+<td>$49 one-time</td>
+<td>This playbook + policy YAML templates + printable HTML companion</td>
+</tr>
+<tr>
+<td><strong>Pro</strong></td>
+<td>$149</td>
+<td>Field Kit plus deeper MCP identity / vault / audit guidance and tooling path</td>
+</tr>
+</tbody>
+</table>
+<p>Contact: Daniel@agenthiveinc.com · AgentHive Inc.</p>
+<p>Brand: <strong>Bot Lock</strong> only.</p>
+<h3 id="132-file-map-field-kit-layout">13.2 File map (Field Kit layout)</h3>
+<pre><code>/workspace/botlock/
+  DEPLOY.txt                      # Reed deploy notes (operators: do not freestyle prod deploys)
+  bot-lock-dist.tar.gz            # Packaged site + playbook + policies for deployers
+  playbook/
+    BOT-LOCK-PLAYBOOK.md          # Canonical Markdown (this document, v2.1+)
+    bot-lock-playbook.html        # Printable HTML companion (regenerated from Markdown)
+  policies/
+    deny-by-default-tools.yaml    # Tool deny-by-default + HITL + egress + arg validation
+    secrets.yaml                  # Vault-only secrets / TTL / audience binding / redaction
+    mcp-allowlist.yaml            # MCP supply-chain allowlist (pin + hash + isolate)
+    kill-switch.yaml              # Fail-closed halt triggers, caps, resume gates
+    kill-switch-runbook.md        # Compact halt/restore companion (§6 + Appendix H)
+  research/
+    WEIGHTS.md                    # Theme weights underlying Check + playbook
+  site/                           # Live static site package (mirrors playbook + policies)
+    index.html                    # Marketing / product entry
+    check.html                    # Bot Lock Check (free weighted self-assessment)
+    playbook.html                 # Site-mounted playbook HTML
+    playbook/                     # Synced copies of MD + HTML playbook
+    policies/                     # Synced policy YAML + kill-switch runbook
+    robots.txt / sitemap.xml
+</code></pre>
+<p><strong>Operator sync rule:</strong> Edit canonical files under <code>playbook/</code> and <code>policies/</code>, then copy into <code>site/playbook/</code> and <code>site/policies/</code> before packaging <code>bot-lock-dist.tar.gz</code>. HTML is derived from Markdown—when they disagree, Markdown wins.</p>
+<h3 id="133-how-to-use-the-html-companion">13.3 How to use the HTML companion</h3>
+<p><code>bot-lock-playbook.html</code> is a printable, clean-typography rendering for reviews and tabletop exercises. <strong>Full Markdown ships in Field Kit</strong> as the canonical editable source (<code>BOT-LOCK-PLAYBOOK.md</code>). When they disagree, trust the Markdown in your version-controlled Field Kit package and update HTML from it.</p>
+<h3 id="134-related-operator-artifacts">13.4 Related operator artifacts</h3>
+<ul>
+<li>Bot Lock Check — score themes before and after rollout (§7.6 V10)  </li>
+<li>Policy change tickets — store diffs and blast-radius notes (§5.3)  </li>
+<li>Kill-switch drill records — MTTA/MTTR and restore approvals (V7, Appendix H)  </li>
+<li>Inventory spreadsheet or CMDB entries for agents / NHIs / MCP servers (V1)  </li>
+<li>Weekly audit ritual checklist — Appendix G  </li>
+<li>On-call halt/restore card — Appendix H (print one page)  </li>
+<li>Procurement / honesty FAQ — Appendix I (buyer and stakeholder framing)  </li>
+</ul>
+<hr />
+<h2 id="appendix-a-glossary-short">Appendix A — Glossary (short)</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NHI</td>
+<td>Non-human identity for an agent or service</td>
+</tr>
+<tr>
+<td>HITL</td>
+<td>Human-in-the-loop approval before a tool executes</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol / plugin-style tool server ecosystem</td>
+</tr>
+<tr>
+<td>Deny-by-default</td>
+<td>Unlisted tools/servers are denied</td>
+</tr>
+<tr>
+<td>Audience binding</td>
+<td>Token usable only for intended API/service</td>
+</tr>
+<tr>
+<td>Fail closed</td>
+<td>On uncertainty or trigger, halt rather than allow</td>
+</tr>
+<tr>
+<td>Field Kit</td>
+<td>Bot Lock $49 one-time playbook + policy pack</td>
+</tr>
+</tbody>
+</table>
+<h2 id="appendix-b-quick-operator-card">Appendix B — Quick operator card</h2>
+<ol>
+<li>Inventory agents, tools, MCP, secrets, egress.  </li>
+<li>Load deny-by-default tools + secrets + MCP allowlist + kill switch.  </li>
+<li>Wire audit and halt actions to real runtime APIs.  </li>
+<li>HITL on send/pay/delete/deploy/grant/export.  </li>
+<li>Drill kill switch; restore only with ticket + root cause.  </li>
+<li>Verify with §7 on systems you own; re-score Check.  </li>
+<li>Change-control every allowlist expansion.  </li>
+</ol>
+<h2 id="appendix-c-control-implementation-notes-operator-detail">Appendix C — Control implementation notes (operator detail)</h2>
+<p>This appendix deepens Field Kit wiring without repeating the catalog. Use it when translating YAML into platform tickets.</p>
+<h3 id="c1-effective-policy-vs-intended-policy">C.1 Effective policy vs intended policy</h3>
+<p>Many incidents happen because the file in git is not what the runtime loaded. Require:</p>
+<ul>
+<li>A <code>policy_version</code> stamp on every agent session start event.</li>
+<li>A control-plane API or UI that shows <strong>effective</strong> allowlists (merged defaults + overrides).</li>
+<li>Drift detection: hash of loaded policy bundle vs hash of git tag.</li>
+<li>Alert when an agent runs with <code>policy_version</code> older than N days in production without an exception ticket.</li>
+</ul>
+<p>Operators should be able to answer in under five minutes: “What policy_version is agent X on right now, and who approved the last allowlist add?”</p>
+<h3 id="c2-human-in-the-loop-design-that-actually-binds">C.2 Human-in-the-loop design that actually binds</h3>
+<p>Weak HITL is worse than honest autonomy because it creates false confidence. Binding HITL means:</p>
+<ul>
+<li>Approver identity is a human role in your IdP, not a shared inbox the agent can read and forge.</li>
+<li>Approval payloads show tool ID, redacted args, blast-radius score, content trust labels, and policy_version.</li>
+<li>Approvals expire (e.g., 15–60 minutes); expired means deny.</li>
+<li>Dual-control for irreversible classes (pay, deploy, grant_access) in higher-risk environments.</li>
+<li>The agent cannot tool-call “approve_my_request.”</li>
+<li>Audit stores approver ID, time, and decision immutably.</li>
+</ul>
+<h3 id="c3-egress-allowlists-without-breaking-legitimate-workflows">C.3 Egress allowlists without breaking legitimate workflows</h3>
+<p>Start from deny, then open by workflow:</p>
+<ol>
+<li>List destinations the workflow truly needs (ticket API, docs host, model endpoint).</li>
+<li>Prefer private networking / private link for internal APIs.</li>
+<li>Block link-local and cloud metadata ranges by default.</li>
+<li>Separate “model provider egress” from “tool egress” so a document connector cannot phone home arbitrarily.</li>
+<li>Log denied destinations with host and agent_id; use the deny log as the candidate allowlist for change control—not chat requests from the agent.</li>
+</ol>
+<h3 id="c4-redaction-vs-availability">C.4 Redaction vs availability</h3>
+<p>Over-aggressive redaction can hide forensic detail; under-aggressive redaction leaks secrets. Practical compromise:</p>
+<ul>
+<li>Redact known secret shapes in prompts, args, and outputs before logs leave the runtime.</li>
+<li>Preserve structural fields (tool_id, decision, audience, host) always.</li>
+<li>Store a sealed, higher-fidelity trace in a restricted bucket for incident response only, with access logging.</li>
+<li>Never ship sealed traces to third-party ticket systems by default.</li>
+</ul>
+<h3 id="c5-multi-agent-boundaries">C.5 Multi-agent boundaries</h3>
+<p>When agents collaborate:</p>
+<ul>
+<li>Each agent keeps its own NHI and allowlist.</li>
+<li>Handoffs pass task objectives and references (ticket IDs, doc IDs), not credentials.</li>
+<li>Downstream agents re-fetch secrets from vault with their own audience.</li>
+<li>Shared memory is untrusted input to each reader.</li>
+<li>A halt on one agent should not silently continue the chain under another agent with inherited context unless policy explicitly allows a reduced tool set.</li>
+</ul>
+<h3 id="c6-model-and-prompt-change-management">C.6 Model and prompt change management</h3>
+<p>Model upgrades and prompt edits change behavior even when YAML is constant:</p>
+<ul>
+<li>Treat prompt and model ID as part of the release bundle alongside policy_version.</li>
+<li>Re-run authorized verification (§7) after model upgrades.</li>
+<li>Re-score Bot Lock Check when autonomy or tools expand.</li>
+<li>Keep a changelog: date, model, prompt hash, policy_version, verifier, result.</li>
+</ul>
+<h3 id="c7-spend-and-resource-caps-as-security-controls">C.7 Spend and resource caps as security controls</h3>
+<p>Cost caps are not only FinOps. Unbounded loops are a reliability and security issue:</p>
+<ul>
+<li>Set session and daily caps below the pain threshold finance notices too late.</li>
+<li>Alert at 50% and 80% consumption; halt at 100%.</li>
+<li>Include tool-vendor API spend, not only model tokens, when tools bill per call.</li>
+<li>After halt, require root_cause_note before raising caps.</li>
+</ul>
+<h3 id="c8-staging-data-policy">C.8 Staging data policy</h3>
+<p>Staging agents with production data are production agents. Prefer:</p>
+<ul>
+<li>Synthetic or scrubbed datasets for tool-enabled staging.</li>
+<li>Production-like policy enforce in staging (not a permissive “dev mode” that never matches prod).</li>
+<li>Distinct NHIs and vault paths per environment.</li>
+<li>Explicit exception tickets if prod data must be used, with time bounds.</li>
+</ul>
+<h3 id="c9-onboarding-a-new-agent-checklist">C.9 Onboarding a new agent (checklist)</h3>
+<ol>
+<li>Name owner, deputy, and business purpose.  </li>
+<li>Complete threat model checklist (§3).  </li>
+<li>Create NHI; no shared accounts.  </li>
+<li>Start with autonomy level ≤ 1 and minimal allowlist.  </li>
+<li>Attach secrets, MCP, kill-switch policies.  </li>
+<li>Enable audit; prove events flow.  </li>
+<li>Staging enforce + authorized verification.  </li>
+<li>Bot Lock Check score snapshot.  </li>
+<li>Prod change ticket; limited canary.  </li>
+<li>Monthly review of allowlist and spend.</li>
+</ol>
+<h3 id="c10-decommissioning-an-agent">C.10 Decommissioning an agent</h3>
+<ol>
+<li>Freeze tools; revoke tokens; disable schedules.  </li>
+<li>Remove MCP allowlist entries unique to the agent.  </li>
+<li>Archive audit; retain per policy.  </li>
+<li>Delete or disable NHI.  </li>
+<li>Remove vault paths after confirming no shared use.  </li>
+<li>Update inventory and Check scope.  </li>
+<li>Postmortem if decommission followed an incident.</li>
+</ol>
+<hr />
+<h2 id="appendix-d-tabletop-exercise-scripts-defense-only">Appendix D — Tabletop exercise scripts (defense only)</h2>
+<p>Use these for 45–60 minute tabletops. No exploit payloads—inject <strong>narrative</strong> events and ask what operators do.</p>
+<h3 id="exercise-1-deny-storm">Exercise 1 — Deny storm</h3>
+<p><strong>Inject:</strong> SIEM shows 200 denies/minute for <code>tool_id=shell</code> on <code>agent.research.draft</code> in prod.<br />
+<strong>Discuss:</strong> Is kill-switch automation engaging? Who gets paged? Do you freeze only that agent or the class? What evidence do you collect before restore?<br />
+<strong>Success:</strong> Team finds session_id, policy_version, content_trust_labels, and decides halt vs tune without enabling shell.</p>
+<h3 id="exercise-2-mcp-hash-mismatch">Exercise 2 — MCP hash mismatch</h3>
+<p><strong>Inject:</strong> Alert <code>hash_mismatch_mcp</code> for <code>internal-docs-mcp</code>.<br />
+<strong>Discuss:</strong> Ordered actions already taken? Who confirms whether a legitimate release forgot to update the pin? How do you avoid “just update the hash” under pressure?<br />
+<strong>Success:</strong> Team treats mismatch as compromise until provenance is verified through the build pipeline, not through the agent.</p>
+<h3 id="exercise-3-approval-fatigue">Exercise 3 — Approval fatigue</h3>
+<p><strong>Inject:</strong> HITL queue has 80 pending <code>send_email</code> approvals; business is angry.<br />
+<strong>Discuss:</strong> Do you widen autonomy (anti-pattern) or split workflows / improve drafts-only tools? How do you prevent rubber-stamp approvals?<br />
+<strong>Success:</strong> Team proposes workflow redesign and dual-control for high recipients, not blanket auto-approve.</p>
+<h3 id="exercise-4-audit-gap">Exercise 4 — Audit gap</h3>
+<p><strong>Inject:</strong> Suspected bad send occurred yesterday; logs lack <code>policy_version</code> and token audience fields.<br />
+<strong>Discuss:</strong> What can you still prove? What schema fix is mandatory before next prod expansion?<br />
+<strong>Success:</strong> Team files a P1 on audit schema and pauses new high-impact tools until fixed.</p>
+<p>Document attendance, decisions, and follow-ups. Tabletops are authorized verification culture, not red-team exploit practice.</p>
+<hr />
+<h2 id="appendix-e-mapping-bot-lock-check-themes-to-field-kit-files">Appendix E — Mapping Bot Lock Check themes to Field Kit files</h2>
+<table>
+<thead>
+<tr>
+<th>Check theme (high weight)</th>
+<th>Primary Field Kit artifact</th>
+<th>Operator evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt injection / content</td>
+<td>Playbook §§2.1, 4.1; gateway + labels</td>
+<td>Labeled sessions; friction on high gateway scores</td>
+</tr>
+<tr>
+<td>Logging / audit</td>
+<td>All YAML <code>audit:</code> blocks; §10</td>
+<td>Queryable immutable-ish events</td>
+</tr>
+<tr>
+<td>Least privilege / IAM</td>
+<td><code>deny-by-default-tools.yaml</code>, <code>secrets.yaml</code></td>
+<td>Per-agent NHI; tight allowlists</td>
+</tr>
+<tr>
+<td>Excessive agency</td>
+<td>autonomy + loop caps; HITL</td>
+<td>Caps visible in config snapshot</td>
+</tr>
+<tr>
+<td>Tool abuse</td>
+<td><code>deny-by-default-tools.yaml</code></td>
+<td>Deny events for unlisted tools</td>
+</tr>
+<tr>
+<td>MCP supply chain</td>
+<td><code>mcp-allowlist.yaml</code></td>
+<td>Pins, hashes, connect denies</td>
+</tr>
+<tr>
+<td>Secrets</td>
+<td><code>secrets.yaml</code></td>
+<td>Issuance/revocation/scrub events</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>egress + kill-switch exfil_pattern</td>
+<td>Pairing alerts; recipient caps</td>
+</tr>
+<tr>
+<td>Guardrails / I/O</td>
+<td>argument_validation; gateway</td>
+<td>Runtime deny even when model complies</td>
+</tr>
+<tr>
+<td>Token delegation</td>
+<td>audience_binding; kill privilege trigger</td>
+<td>Mismatch denials; no passthrough</td>
+</tr>
+</tbody>
+</table>
+<p>Use this table in quarterly reviews: each theme should point to a file, an owner, and a recent evidence sample.</p>
+<hr />
+<h2 id="appendix-f-faq-for-stakeholders">Appendix F — FAQ for stakeholders</h2>
+<p><strong>Q: Will Bot Lock stop all prompt injection?</strong><br />
+A: No. It prioritizes reducing blast radius when influence lands, plus prevention layers outside the model.</p>
+<p><strong>Q: Can we enable shell for “debugging” in prod?</strong><br />
+A: Not as a standing allowlist entry. Use a separate break-glass runbook with time-bound access, dual control, and mandatory post-use review—if you must—otherwise keep shell denied.</p>
+<p><strong>Q: Is the Field Kit a managed SaaS control plane?</strong><br />
+A: Field Kit is the playbook plus policy templates and companion HTML at the $49 one-time tier. Wire templates into your runtime. Pro adds deeper identity/vault/audit guidance path.</p>
+<p><strong>Q: How does this relate to OWASP LLM risks?</strong><br />
+A: Themes overlap (injection, sensitive disclosure, excessive agency, supply chain, etc.). Use OWASP language if helpful for coverage mapping; Field Kit remains operator-policy oriented.</p>
+<p><strong>Q: What if business rejects HITL latency?</strong><br />
+A: Narrow the agent’s job so fewer actions need HITL; use drafts-only tools; split agents; do not “fix” latency by removing the human from irreversible actions.</p>
+<p><strong>Q: Are monthly subscriptions required?</strong><br />
+A: This Field Kit companion documents Check (free), Field Kit ($49 one-time), and Pro ($149). These tiers are one-time or free—not monthly subscription pricing.</p>
+<p><strong>Q: Does Field Kit replace our IAM / IdP / SIEM?</strong><br />
+A: No. It is an agent-control playbook and policy starter pack. Keep your IdP, vault, SIEM, and change systems—Bot Lock tells operators how to bind those to agent tools, MCP, and halt paths.</p>
+<p><strong>Q: Is a high Bot Lock Check score a certification?</strong><br />
+A: No. It is a weighted self-assessment UX over defensive themes. Use it for deltas and prioritization, not as a compliance certificate or penetration-test substitute.</p>
+<hr />
+<h2 id="appendix-g-weekly-audit-verify-ritual">Appendix G — Weekly audit verify ritual</h2>
+<p>A short, recurring ritual so audit trails stay trustworthy. Name a weekday owner (many teams use Wednesday). The phrase <strong>“Wednesday breaks”</strong> means: if this ritual fails, treat audit integrity as broken for the week—<strong>pause new high-impact tool allows</strong> until the chain is healthy again.</p>
+<h3 id="g1-mental-model-hash-chain-signed-events">G.1 Mental model: hash-chain / signed events</h3>
+<p>You do not need a blockchain product. You need a <strong>tamper-evident sequence</strong>:</p>
+<ol>
+<li>Each audit event gets a stable ID and timestamp.</li>
+<li>Optionally, each event (or each batch) includes a hash of the prior event/batch (<code>prev_hash</code>) and a hash of its own canonical payload (<code>event_hash</code>).</li>
+<li>A verifier job recomputes hashes over the retained window and alerts on mismatch, gap, or reorder.</li>
+<li>Write access to delete or rewrite history is denied to agent NHIs and to routine operator roles; break-glass access is logged separately.</li>
+</ol>
+<p>If your sink is already WORM/immutable object storage with object-lock, say so in the runbook—the ritual still checks <strong>completeness and joinability</strong>, not only bytes-on-disk.</p>
+<h3 id="g2-what-wednesday-breaks-means-operationally">G.2 What “Wednesday breaks” means operationally</h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Operator meaning</th>
+<th>Immediate action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verifier hash mismatch</td>
+<td>Possible tampering, clock skew corruption, or pipeline bug</td>
+<td>Freeze policy expansions; page security; preserve raw sink; open incident</td>
+</tr>
+<tr>
+<td>Gap in event sequence for an agent class</td>
+<td>Dropped logs or silent filter</td>
+<td>Halt agents in that class if high-impact tools enabled; fix shipper; backfill if possible</td>
+</tr>
+<tr>
+<td>Sessions missing <code>policy_version</code> or <code>session_id</code></td>
+<td>Reconstructability failed</td>
+<td>Block new HITL-class tools until schema fixed (tabletop Exercise 4)</td>
+</tr>
+<tr>
+<td>Agent NHI can delete sink objects</td>
+<td>Control plane anti-pattern</td>
+<td>Revoke that permission same day; treat as Sev1 hygiene</td>
+</tr>
+<tr>
+<td>Kill-switch engage events missing after a known drill</td>
+<td>Halt path not auditing</td>
+<td>Re-wire before next prod change</td>
+</tr>
+</tbody>
+</table>
+<p>“Wednesday breaks” is a <strong>cultural circuit breaker</strong>: business pressure to ship allowlist changes does not override a red audit ritual.</p>
+<h3 id="g3-weekly-checklist-3045-minutes">G.3 Weekly checklist (30–45 minutes)</h3>
+<ol>
+<li><strong>Verifier green?</strong> Run hash-chain / signature / WORM verification job for the last 7 days. Record pass/fail in the weekly note.  </li>
+<li><strong>Sample five sessions</strong> across at least two agents: reconstruct tool order, decisions, issuance, MCP connects.  </li>
+<li><strong>Deny storm review:</strong> top denied <code>tool_id</code> and egress hosts; file change tickets or confirm expected noise.  </li>
+<li><strong>Kill-switch health:</strong> confirm last drill date &lt; 35 days; confirm paging path still resolves.  </li>
+<li><strong>Policy drift:</strong> effective <code>policy_version</code> vs git tag for each prod agent; alert on drift &gt; N days without exception.  </li>
+<li><strong>Secret scrub samples:</strong> confirm scrub events still fire in staging canary.  </li>
+<li><strong>Caps and spend:</strong> session/daily spend vs caps; no silent cap raises.  </li>
+<li><strong>Write the Wednesday note:</strong> date, verifier result, sample session IDs, open gaps, owner initials. If verifier fails → declare Wednesday breaks and execute table above.</li>
+</ol>
+<h3 id="g4-evidence-to-keep">G.4 Evidence to keep</h3>
+<ul>
+<li>Weekly note in the security ops channel or ticket project  </li>
+<li>Verifier job logs (retained ≥ incident retention)  </li>
+<li>Link to any incident opened from a failed ritual  </li>
+<li>Quarterly export attached to Bot Lock Check re-score</li>
+</ul>
+<hr />
+<h2 id="appendix-h-on-call-card-print-one-page">Appendix H — On-call card (print one page)</h2>
+<p><strong>Bot Lock — Halt / Restore card</strong> · AgentHive Inc. · Fail closed · Brand: Bot Lock  </p>
+<p>Keep this laminated or in the on-call packet. Full detail: §6 and <code>policies/kill-switch-runbook.md</code>.</p>
+<h3 id="halt-do-in-order">HALT (do in order)</h3>
+<ol>
+<li><strong>Identify</strong> — <code>agent_id</code>, <code>env</code> (staging/prod), blast radius (tools/MCP).  </li>
+<li><strong>Engage</strong> — <code>human_panic</code> if automation did not fire.  </li>
+<li><strong>Verify freeze</strong> — no new tool calls executing.  </li>
+<li><strong>Verify revoke</strong> — session tokens invalidated at broker.  </li>
+<li><strong>Verify egress cut</strong> — runtime cannot reach external hosts.  </li>
+<li><strong>Snapshot audit</strong> — seal logs; <strong>do not “clean up.”</strong>  </li>
+<li><strong>Page / notify</strong> — security on-call, agent owner, business owner.  </li>
+<li><strong>Quarantine</strong> — isolate runtime; prevent self-healing restart with bad state.  </li>
+<li><strong>Ticket</strong> — open <code>INC-…</code> with trigger_id, session_id, policy_version.  </li>
+<li><strong>User message</strong> — degraded availability text; no internal trigger detail that helps iteration.</li>
+</ol>
+<h3 id="restore-all-gates-required">RESTORE (all gates required)</h3>
+<ul>
+<li>[ ] Approver role = <code>security_oncall</code> (or documented equivalent)  </li>
+<li>[ ] <code>incident_ticket_id</code> present  </li>
+<li>[ ] <code>root_cause_note</code> written (incl. false-positive tunes)  </li>
+<li>[ ] Tokens rotated if revoke fired  </li>
+<li>[ ] <code>policy_version</code> pinned or rolled back  </li>
+<li>[ ] MCP hash/pins verified if supply chain involved  </li>
+<li>[ ] Bot Lock Check / V-drills re-run if control gap found  </li>
+<li>[ ] Default remains quarantined until boxes checked  </li>
+</ul>
+<h3 id="caps-reminder-template-tune-per-env">Caps reminder (template — tune per env)</h3>
+<p><code>daily_spend_usd: 50</code> · <code>session_spend_usd: 10</code> · <code>max_egress_bytes_per_session: 5_000_000</code> · <code>max_external_recipients: 0</code> until HITL  </p>
+<h3 id="break-glass">Break-glass</h3>
+<p>Break-glass contacts live <strong>outside</strong> the agent vault. Agents never clear their own quarantine. Sibling agents do not inherit quarantined tokens.</p>
+<h3 id="after-action">After-action</h3>
+<p>True positive → postmortem ≤ 72 hours. False positive → threshold tune with expiry + owner. Record MTTA/MTTR. Schedule next drill.</p>
+<hr />
+<h2 id="appendix-i-procurement-honesty-faq">Appendix I — Procurement / honesty FAQ</h2>
+<p>Tone matches the live Bot Lock site: useful, direct, not theatrical. <strong>Not a magic guarantee. Not a full IAM replacement.</strong></p>
+<h3 id="what-you-are-buying-at-49-field-kit">What you are buying at $49 (Field Kit)</h3>
+<ul>
+<li>This operator playbook (Markdown + printable HTML)  </li>
+<li>Starter policy YAML: deny-by-default tools, secrets/vault posture, MCP allowlist, kill-switch  </li>
+<li>Kill-switch runbook companion  </li>
+<li>Alignment to free <strong>Bot Lock Check</strong> themes for before/after scoring  </li>
+</ul>
+<p>You are buying a <strong>dense operating manual and templates</strong> you wire into <em>your</em> runtime, IdP, vault, and audit sink.</p>
+<h3 id="what-you-are-not-buying">What you are not buying</h3>
+<ul>
+<li>A hosted control plane that magically wraps every agent vendor  </li>
+<li>A promise that models will never follow malicious instructions  </li>
+<li>A substitute for penetration testing, red team, or compliance certification  </li>
+<li>A replacement for Okta/Azure AD, Vault, SIEM, EDR, or cloud IAM  </li>
+<li>Unlimited “we’ll harden your fleet for you” professional services (ask separately if needed)  </li>
+<li>Monthly subscription lock-in for Field Kit (this tier is <strong>$49 one-time</strong>)</li>
+</ul>
+<h3 id="honest-positioning-vs-pro-149">Honest positioning vs Pro ($149)</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Field Kit $49</th>
+<th>Pro $149</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Playbook + YAML starters</td>
+<td>Yes</td>
+<td>Yes (includes Field Kit path)</td>
+</tr>
+<tr>
+<td>Deeper MCP identity / vault / audit guidance path</td>
+<td>Overview here</td>
+<td>Deeper Pro path</td>
+</tr>
+<tr>
+<td>Managed SaaS enforcement</td>
+<td>No</td>
+<td>No (unless separately productized later—do not assume)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="buyer-checklist-procurement-friendly">Buyer checklist (procurement-friendly)</h3>
+<ol>
+<li>Confirm you have (or will build) a runtime hook that can enforce allow/deny before tool execution.  </li>
+<li>Confirm a vault/broker exists or is on the roadmap—templates assume <code>vault_only</code>.  </li>
+<li>Confirm an audit sink exists that agents cannot wipe.  </li>
+<li>Name owners for kill-switch engage/restore.  </li>
+<li>Use Bot Lock Check free to baseline; Field Kit to operationalize gaps.  </li>
+<li>Read §12 Honest limits before promising executives an “unhackable agent.”</li>
+</ol>
+<h3 id="claims-we-intentionally-avoid">Claims we intentionally avoid</h3>
+<ul>
+<li>“Guaranteed prompt-injection proof”  </li>
+<li>“Full IAM for every AI tool on the market”  </li>
+<li>Fictional enterprise theater pricing or monthly-only framing for this kit  </li>
+<li>Brand confusion with other product names — this product is <strong>Bot Lock</strong> only  </li>
+</ul>
+<h3 id="one-sentence-for-the-purchase-order">One sentence for the purchase order</h3>
+<p><strong>Bot Lock Field Kit ($49 one-time): operator playbook and policy templates to deny-by-default agent tools, vault credentials, allowlist MCP, audit actions, and fail closed with a kill switch—on systems you control.</strong></p>
+<h3 id="contact">Contact</h3>
+<p>Daniel@agenthiveinc.com · AgentHive Inc.</p>
+<hr />
+<p><em>Bot Lock Field Kit Playbook v2.1 — AgentHive Inc. — Defense only. Built from weighted AI security themes. Not a magic guarantee.</em></p>
+  </main>
+  <footer class="footer">
+    <p>Bot Lock by AgentHive Inc. — Check (free) · Field Kit ($49 one-time) · Pro ($149). Not a magic guarantee. Contact: Daniel@agenthiveinc.com</p>
+  </footer>
+</body>
+</html>

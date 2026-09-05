@@ -1,0 +1,52 @@
+# Bot Lock — MCP / plugin supply-chain allowlist
+# Verify provenance before install. Unlisted servers are denied.
+
+version: "1.0"
+policy_id: botlock.mcp.allowlist
+mode: allowlist_only
+
+defaults:
+  install: deny
+  connect: deny
+  trust_unverified_skills: false
+
+requirements:
+  - signed_manifest: preferred
+  - pinned_version: required
+  - owner_attestation: required
+  - network_scope_declared: required
+  - credential_scope_declared: required
+
+allowlist:
+  # Example entries — replace with your org's approved MCP servers
+  - name: internal-docs-mcp
+    publisher: "${ORG}"
+    version: "1.2.0"
+    hash_sha256: "REPLACE_WITH_PINNED_HASH"
+    scopes: [read_docs]
+    network: [docs.internal.example]
+    credentials: none
+  - name: ticketing-readonly-mcp
+    publisher: "${ORG}"
+    version: "0.9.1"
+    hash_sha256: "REPLACE_WITH_PINNED_HASH"
+    scopes: [read_tickets]
+    network: [tickets.internal.example]
+    credentials: ticket_ro_token
+
+deny_patterns:
+  - "unpinned latest tags"
+  - "arbitrary community skills on sensitive hosts"
+  - "servers requesting shell or full filesystem"
+  - "servers requesting wildcard OAuth scopes"
+
+runtime:
+  isolate_per_server: true
+  separate_credentials_per_server: true
+  no_credential_passthrough_between_servers: true
+  kill_switch_on_hash_mismatch: true
+
+audit:
+  log_installs: true
+  log_connects: true
+  log_tool_invocations: true

@@ -1,0 +1,16 @@
+Bot Lock — deploy clawlock-security (interim hostname)
+
+From /workspace/botlock:
+
+  netlify deploy --prod --dir site --site 4bd08ad7-c6b5-4d66-9748-4a8e2774cb5a
+
+Or from the tarball:
+
+  tar -xzf bot-lock-dist.tar.gz
+  netlify deploy --prod --dir site --site 4bd08ad7-c6b5-4d66-9748-4a8e2774cb5a
+
+Stripe (do not recreate):
+  Field Kit $49 https://buy.stripe.com/00weVdcf24uLbCZfKG2ZO1c
+  Pro $149 https://buy.stripe.com/00w6oH1Aof9pdL7dCy2ZO1d
+
+Playbook: site/playbook/BOT-LOCK-PLAYBOOK.md (~12.6k words) + HTML twin. Do NOT deploy from agents unless Reed asks.

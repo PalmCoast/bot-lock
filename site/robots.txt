@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://clawlock-security.netlify.app/sitemap.xml
