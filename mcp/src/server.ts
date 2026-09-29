@@ -29,7 +29,7 @@ function record(state: ReturnType<typeof loadState>, action: string, payload: un
 export function createBotLockServer(home = defaultHome()) {
   const server = new McpServer({
     name: "bot-lock",
-    version: "1.0.0",
+    version: "1.1.0",
   });
 
   server.tool(

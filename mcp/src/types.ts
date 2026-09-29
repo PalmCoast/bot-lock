@@ -110,6 +110,7 @@ export type ControlStatus = {
   identityReady: boolean;
   identityId?: string;
   vaultUnlocked: boolean;
+  keySource?: "env" | "keychain" | "file" | "none";
   secretCount: number;
   auditValid: boolean;
   auditLength: number;

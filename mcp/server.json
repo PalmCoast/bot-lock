@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.PalmCoast/bot-lock",
+  "title": "Bot Lock",
+  "description": "Local agent identity, encrypted vault, hash-chained audit log and deny-by-default scope checks.",
+  "repository": {
+    "url": "https://github.com/PalmCoast/bot-lock",
+    "source": "github",
+    "subfolder": "mcp"
+  },
+  "version": "1.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@agenthive/bot-lock-mcp",
+      "version": "1.1.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        { "name": "BOTLOCK_HOME", "description": "State directory (default ~/.botlock)", "isRequired": false, "format": "string", "isSecret": false },
+        { "name": "BOTLOCK_MASTER_KEY", "description": "Pin the vault key; auto-generated if unset", "isRequired": false, "format": "string", "isSecret": true }
+      ]
+    }
+  ]
+}

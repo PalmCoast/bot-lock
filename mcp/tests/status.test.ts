@@ -26,8 +26,7 @@ describe("status and store", () => {
     const dir = home();
     const state = loadState(dir);
     state.identity = createIdentity("prod");
-    state.masterKey = generateMasterKey();
-    state.secrets.gh = sealSecret(state.masterKey, "gh", "ghs_test", state.identity.id);
+    state.secrets.gh = sealSecret(state.masterKey!, "gh", "ghs_test", state.identity.id);
     state.audit.push(
       appendAudit({
         chain: state.audit,
@@ -48,6 +47,7 @@ describe("status and store", () => {
     expect(status.auditLength).toBe(1);
     expect(reloaded.secrets.gh).toBeDefined();
     expect(JSON.stringify(reloaded.secrets.gh)).not.toContain("ghs_test");
+    expect(reloaded.masterKey).toBe(state.masterKey);
   });
 
   it("flags a permissive tool default", () => {

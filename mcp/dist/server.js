@@ -26,7 +26,7 @@ function record(state, action, payload) {
 export function createBotLockServer(home = defaultHome()) {
     const server = new McpServer({
         name: "bot-lock",
-        version: "1.0.0",
+        version: "1.1.0",
     });
     server.tool("botlock_status", "Return Bot Lock control-plane status: identity, vault, audit chain, policy, kill switch, and findings.", {}, async () => {
         const state = loadState(home);
