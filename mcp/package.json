@@ -1,10 +1,17 @@
 {
   "name": "@agenthive/bot-lock-mcp",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "mcpName": "io.github.PalmCoast/bot-lock",
   "description": "Bot Lock MCP server — identity, vault, hash-chained audit, and policy gates for AI agents.",
   "type": "module",
   "license": "MIT",
   "author": "AgentHive Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PalmCoast/bot-lock.git",
+    "directory": "mcp"
+  },
+  "homepage": "https://github.com/PalmCoast/bot-lock/tree/main/mcp",
   "bin": {
     "bot-lock-mcp": "./dist/index.js"
   },
@@ -16,7 +23,8 @@
   "files": [
     "dist",
     "README.md",
-    "INSTALL.md"
+    "INSTALL.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
@@ -44,5 +52,8 @@
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

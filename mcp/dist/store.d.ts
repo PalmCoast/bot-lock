@@ -1,8 +1,14 @@
+import { type KeySource } from "./keystore.js";
 import type { AuditEntry, Policy, StoredIdentity } from "./types.js";
 import type { SealedSecret } from "./vault.js";
 export type BotLockState = {
     identity?: StoredIdentity;
+    /** In memory only. Never persisted to state.json. */
     masterKey?: string;
+    /** Where masterKey came from (in memory only). */
+    keySource?: KeySource;
+    keyLocation?: string;
+    keyWarnings?: string[];
     secrets: Record<string, SealedSecret>;
     audit: AuditEntry[];
     policy: Policy;

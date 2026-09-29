@@ -7,6 +7,9 @@ export function evaluateStatus(state) {
     const vaultUnlocked = Boolean(state.masterKey);
     if (!vaultUnlocked)
         findings.push("Vault master key is missing.");
+    if (state.keySource === "file") {
+        findings.push(`Vault key is in a key file (${state.keyLocation}), not an OS keychain. Set BOTLOCK_MASTER_KEY from a secret manager or keep the key file on a separate disk.`);
+    }
     const secretCount = Object.keys(state.secrets).length;
     if (state.policy.secrets.requireVault && secretCount === 0) {
         findings.push("Policy requires a vault, but no secrets are stored yet.");
@@ -40,6 +43,7 @@ export function evaluateStatus(state) {
         identityReady,
         identityId: state.identity?.id,
         vaultUnlocked,
+        keySource: state.keySource,
         secretCount,
         auditValid,
         auditLength: state.audit.length,
