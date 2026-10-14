@@ -34,11 +34,8 @@ See [INSTALL.md](./INSTALL.md) for Claude Code and Cursor.
 - Scope checks only work if the **host agent consults them** before calling other tools.
 - The vault encrypts secrets at rest. With the key-file fallback, someone who can read both the key file and `state.json` can decrypt them; use `BOTLOCK_MASTER_KEY` or the OS keychain for real separation. It is not an HSM.
 - Hash-chained audit detects tampering of the local file. It is not a remote SIEM.
-- Use with the Field Kit policies and the kill-switch runbook. Software alone is not a program.
+- Pair it with clear policies and a kill-switch runbook. Software alone is not a security program.
 
-## Free vs paid
+## License
 
-This MCP server is free (MIT). The optional paid tiers at https://bot-lock.netlify.app/#pricing are the playbook and templates:
-
-- **Field Kit ($49 one-time):** the Bot Lock Playbook and the policy YAML templates.
-- **Pro ($149 one-time):** everything in the Field Kit. It currently has no Pro-only files; it is the higher tier for teams that want to back the free server.
+Free and open source (MIT). No account, license key, or purchase needed. Built by AgentHive (https://agenthiveinc.com).

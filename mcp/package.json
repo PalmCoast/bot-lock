@@ -1,5 +1,5 @@
 {
-  "name": "@agenthive/bot-lock-mcp",
+  "name": "bot-lock-mcp",
   "version": "1.1.0",
   "mcpName": "io.github.PalmCoast/bot-lock",
   "description": "Bot Lock MCP server — identity, vault, hash-chained audit, and policy gates for AI agents.",
