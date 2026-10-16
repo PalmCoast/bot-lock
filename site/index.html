@@ -3,19 +3,27 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bot Lock — Reduce AI agent risk with policy, audit, and least privilege</title>
-<meta name="description" content="Bot Lock helps teams reduce AI agent risk: free weighted security Check, Field Kit playbook and policy templates, Pro MCP identity/vault/audit. Built by AgentHive Inc." />
-<link rel="canonical" href="https://clawlock-security.netlify.app/" />
+<title>Bot Lock: AI agent security, policy gates and audit</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Bot Lock" />
+    <meta property="og:url" content="https://bot-lock.netlify.app/" />
+    <meta property="og:title" content="Bot Lock — lock down what your AI agents can do" />
+    <meta property="og:description" content="Your agents can reach tools, files, and credentials. Bot Lock puts policy gates, audit, and least privilege in front of them. Start with the free MIT MCP server and the Bot Lock Check; Field Kit and Pro add the playbook and policy templates." />
+    <meta property="og:image" content="https://bot-lock.netlify.app/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Bot Lock: lock down what your bots can do." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bot Lock — lock down what your AI agents can do" />
+    <meta name="twitter:description" content="Policy gates, audit, and least privilege for AI agents. Free MIT MCP server and Bot Lock Check from AgentHive Inc." />
+    <meta name="twitter:image" content="https://bot-lock.netlify.app/og.png" />
+    <meta name="twitter:image:alt" content="Bot Lock: lock down what your bots can do." />
+
+<meta name="description" content="Lock down AI agents with a free MIT MCP server (identity, vault, audit, policy gates), a free security Check, and the $49 Field Kit playbook." />
+<link rel="canonical" href="https://bot-lock.netlify.app/" />
 <meta name="theme-color" content="#0b1220" />
 <meta name="robots" content="index,follow" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="Bot Lock" />
-<meta property="og:title" content="Bot Lock — Reduce AI agent risk" />
-<meta property="og:description" content="Free Bot Lock Check, Field Kit playbook + policies, Pro MCP identity/vault/audit. Honest controls — not a magic guarantee." />
-<meta property="og:url" content="https://clawlock-security.netlify.app/" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Bot Lock — Reduce AI agent risk" />
-<meta name="twitter:description" content="Free Check, Field Kit, Pro. Cool-headed agent security from AgentHive Inc." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1220'/%3E%3Crect x='8' y='14' width='16' height='11' rx='2' fill='none' stroke='%232dd4bf' stroke-width='2'/%3E%3Cpath d='M11 14v-3a5 5 0 0 1 10 0v3' fill='none' stroke='%2338bdf8' stroke-width='2'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,22 +34,26 @@
   "@graph":[
     {
       "@type":"Organization",
-      "@id":"https://clawlock-security.netlify.app/#org",
+      "@id":"https://bot-lock.netlify.app/#org",
       "name":"AgentHive Inc.",
+      "sameAs":["https://agenthiveinc.com/"],
       "email":"Daniel@agenthiveinc.com",
-      "url":"https://clawlock-security.netlify.app/"
+      "url":"https://bot-lock.netlify.app/"
     },
     {
       "@type":"SoftwareApplication",
       "name":"Bot Lock",
       "applicationCategory":"SecurityApplication",
-      "description":"Reduces AI agent risk with self-assessment, playbook, policy templates, and MCP identity/vault/audit path.",
-      "url":"https://clawlock-security.netlify.app/",
-      "publisher":{"@id":"https://clawlock-security.netlify.app/#org"},
+      "description":"Reduces AI agent risk with a free MIT MCP server (identity, vault, audit, policy gates), a self-assessment, and a paid playbook with policy templates.",
+      "url":"https://bot-lock.netlify.app/",
+      "operatingSystem":"Node.js (MCP server), any browser (Check)",
+      "publisher":{"@id":"https://bot-lock.netlify.app/#org"},
+      "author":{"@type":"Person","name":"Daniel Graham","url":"https://agenthiveinc.com/about"},
       "offers":[
-        {"@type":"Offer","name":"Bot Lock Check","price":"0","priceCurrency":"USD"},
-        {"@type":"Offer","name":"Bot Lock Field Kit","price":"49","priceCurrency":"USD"},
-        {"@type":"Offer","name":"Bot Lock Pro","price":"149","priceCurrency":"USD"}
+        {"@type":"Offer","name":"Bot Lock MCP server (MIT)","price":"0","priceCurrency":"USD","url":"https://github.com/PalmCoast/bot-lock/tree/main/mcp"},
+        {"@type":"Offer","name":"Bot Lock Check","price":"0","priceCurrency":"USD","url":"https://bot-lock.netlify.app/check.html"},
+        {"@type":"Offer","name":"Bot Lock Field Kit (one-time)","price":"49","priceCurrency":"USD","url":"https://bot-lock.netlify.app/#pricing"},
+        {"@type":"Offer","name":"Bot Lock Pro (one-time)","price":"149","priceCurrency":"USD","url":"https://bot-lock.netlify.app/#pricing"}
       ]
     }
   ]
@@ -107,6 +119,7 @@ section{padding:64px 0}
 .section-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:640px}
 h2{font-size:clamp(1.6rem,3vw,2.15rem)}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-3.four{grid-template-columns:repeat(2,1fr)}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .feature h3{font-size:1.15rem;margin:10px 0 8px}
 .feature p{color:var(--muted);font-size:.95rem}
@@ -129,7 +142,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
 .footrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .honest{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(180deg,rgba(45,212,191,.06),transparent);color:var(--muted);font-size:14px}
 @media (max-width:860px){
-  .hero-grid,.grid-3,.grid-2{grid-template-columns:1fr}
+  .hero-grid,.grid-3,.grid-3.four,.grid-2{grid-template-columns:1fr}
   .navlinks{display:none}
   .stat-row{grid-template-columns:1fr}
 }
@@ -142,9 +155,10 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
     <div class="navlinks">
       <a href="/#themes">Themes</a>
       <a href="/check.html">Check</a>
-      <a href="/playbook.html">Playbook</a>
+      <a href="/playbook-teaser">Playbook preview</a>
       <a href="/#pricing">Pricing</a>
-      <a class="btn btn-primary btn-sm" href="/check.html">Run free Check</a>
+      <a href="/about.html">About</a>
+      <a class='btn btn-primary btn-sm' href='/check.html'>Run free Check</a>
     </div>
   </div>
 </nav>
@@ -153,10 +167,10 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
     <div>
       <div class="kicker">AgentHive Inc. · Agent security</div>
       <h1>Lock down what your bots can do.</h1>
-      <p class="lede">Bot Lock helps you reduce AI agent risk with least privilege, audit, and deny-by-default tools — not wishful system prompts. Honest controls. No magic guarantee.</p>
+      <p class="lede">For teams running AI agents with tool access: a free MCP server and security Check, plus a $49 Field Kit playbook. Least privilege, audit and deny-by-default tools instead of system-prompt promises.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="/check.html">Run free Bot Lock Check</a>
-        <a class="btn btn-ghost" href="/#pricing">See Field Kit &amp; Pro</a>
+        <a class='btn btn-primary' href='/check.html'>Run free Bot Lock Check</a>
+        <a class="btn btn-ghost" href="/#pricing">Field Kit $49 · Pro $149</a>
       </div>
     </div>
     <div class="card glow">
@@ -176,14 +190,19 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">Product</div>
-      <h2>Start free. Harden with the Field Kit. Scale with Pro.</h2>
+      <h2>Start free with the MCP server. Add the playbook when you need it.</h2>
       <p class="muted">Defense in depth for LLM apps, agents, MCP servers, and multi-agent workflows.</p>
     </div>
-    <div class="grid-3">
+    <div class="grid-3 four">
+      <div class="card feature">
+        <div class="icon">⌘</div>
+        <h3>Bot Lock MCP — free</h3>
+        <p>MIT-licensed local MCP server: Ed25519 agent identity, AES-256-GCM vault, signed hash-chained audit log, deny-by-default scope checks, and a kill switch. <a href="https://github.com/PalmCoast/bot-lock/tree/main/mcp">Source on GitHub</a>.</p>
+      </div>
       <div class="card feature">
         <div class="icon">✓</div>
         <h3>Bot Lock Check</h3>
-        <p>Interactive self-assessment scored from weighted AI security themes. Works offline in your browser.</p>
+        <p>Interactive self-assessment scored from weighted AI security themes. Works offline in your browser. <a href="/check.html">Run the free Check</a>.</p>
       </div>
       <div class="card feature">
         <div class="icon">▣</div>
@@ -193,7 +212,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
       <div class="card feature">
         <div class="icon">⬡</div>
         <h3>Pro</h3>
-        <p>Field Kit plus MCP identity, vault issuance patterns, and immutable audit guidance for production agents.</p>
+        <p>Everything in the Field Kit, for teams that want to back the free MCP server. No Pro-only files today.</p>
       </div>
     </div>
   </div>
@@ -231,18 +250,19 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
     <div class="section-head">
       <div class="kicker">Pricing</div>
       <h2>Simple tiers. Live checkout.</h2>
-      <p class="muted">One-time Stripe checkout on the First Deploy account. After pay you land on the playbook.</p>
+      <p class="muted">The MCP server and Check are free. Field Kit and Pro are one-time Stripe checkouts on the First Deploy account. After pay you land on the playbook.</p>
     </div>
     <div class="grid-3">
       <div class="card price">
         <div class="kicker">Free</div>
         <div class="amt">$0</div>
         <ul>
+          <li>Bot Lock MCP server (MIT, runs locally)</li>
           <li>Bot Lock Check (browser, offline-capable)</li>
           <li>Weighted theme scoring</li>
           <li>Shareable risk snapshot</li>
         </ul>
-        <a class="btn btn-ghost" href="/check.html">Start Check</a>
+        <a class='btn btn-ghost' href='/check.html'>Start Check</a>
       </div>
       <div class="card price featured">
         <span class="badge">Popular</span>
@@ -262,9 +282,9 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
         <div class="amt">$149 <small>one-time</small></div>
         <ul>
           <li>Everything in Field Kit</li>
-          <li>MCP identity (NHI) patterns</li>
-          <li>Vault issuance &amp; audience binding</li>
-          <li>Immutable audit guidance</li>
+          <li>Same playbook chapters: agent identity (NHI), vault issuance &amp; audience binding, audit</li>
+          <li>Backs the free MIT MCP server</li>
+          <li>No Pro-only files yet</li>
         </ul>
         <a class="btn btn-ghost" href="https://buy.stripe.com/00w6oH1Aof9pdL7dCy2ZO1d">Get Pro</a>
         <p class="note">Live Stripe checkout.</p>
@@ -273,19 +293,45 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
     <p class="honest" style="margin-top:24px"><strong style="color:var(--ink)">Honest positioning:</strong> Bot Lock reduces agent risk when you apply layered controls. It does not guarantee zero successful injections or replace authorized red-team verification.</p>
   </div>
 </section>
+<section id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">How it works</div>
+      <h2 id="how-h">Three steps, in order.</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card feature">
+        <div class="kicker">1 · Free</div>
+        <h3>Run the Check</h3>
+        <p>Score your agent setup against the weighted themes above. Runs in your browser, works offline, and gives you a shareable risk snapshot. <a href="/check.html">Run the free Check</a>.</p>
+      </div>
+      <div class="card feature">
+        <div class="kicker">2 · Free</div>
+        <h3>Install the MCP server</h3>
+        <p>MIT-licensed and local: Ed25519 agent identity, AES-256-GCM vault, signed hash-chained audit log, deny-by-default scope checks and a kill switch. <a href="https://github.com/PalmCoast/bot-lock/tree/main/mcp">Source on GitHub</a>.</p>
+      </div>
+      <div class="card feature">
+        <div class="kicker">3 · $49 one-time</div>
+        <h3>Apply the Field Kit</h3>
+        <p>The full playbook plus policy YAML for deny-by-default tools, MCP allowlist, secrets and kill switch, and a 30-day adoption plan. <a href="/playbook-teaser">Read the free preview</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section style="padding-top:0">
   <div class="wrap grid-2">
     <div class="card">
-      <div class="kicker">Playbook teaser</div>
+      <div class="kicker">Playbook preview</div>
       <h3 style="margin:10px 0">Threat model → controls → verify</h3>
-      <p class="muted" style="font-size:14px">Dense, defense-only guidance: principles, checklists, anti-patterns, and a verification playbook for systems you own.</p>
-      <a class="btn btn-ghost btn-sm" style="margin-top:16px" href="/playbook.html">Read teaser</a>
+      <p class="muted" style="font-size:14px">Dense, defense-only guidance: principles, checklists, anti-patterns, and a verification playbook for systems you own. Read the contents and chapter 1 free.</p>
+      <a class="btn btn-ghost btn-sm" href="/playbook-teaser" style="margin-top:16px">Read the preview</a>
     </div>
     <div class="card">
       <div class="kicker">Contact</div>
       <h3 style="margin:10px 0">Ship safer agents</h3>
-      <p class="muted" style="font-size:14px">Questions on Field Kit, Pro, or enterprise rollout? Reach Daniel Graham / Reed at AgentHive Inc.</p>
+      <p class="muted" style="font-size:14px">Questions on Field Kit, Pro, or an enterprise rollout? Email Daniel Graham at AgentHive Inc.</p>
       <a class="btn btn-ghost btn-sm" style="margin-top:16px" href="mailto:Daniel@agenthiveinc.com?subject=Bot%20Lock">Email Daniel</a>
     </div>
   </div>
@@ -294,13 +340,17 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
   <div class="wrap footrow">
     <div>
       <strong style="color:var(--ink)">Bot Lock</strong> by AgentHive Inc.<br/>
-      Reduces agent risk. Not a magic guarantee.
+      Reduces agent risk. Honest controls, no magic.<br/>
+      <a href="/check.html">Free Check</a> · <a href="/playbook-teaser">Playbook preview</a> · <a href="/#pricing">Pricing</a> · <a href="https://github.com/PalmCoast/bot-lock/tree/main/mcp">MCP server on GitHub</a> · <a href="/about.html">About</a>
     </div>
     <div>
       <a href="mailto:Daniel@agenthiveinc.com">Daniel@agenthiveinc.com</a><br/>
-      <span class="mono" style="font-size:12px">clawlock-security.netlify.app</span>
+      <a href="tel:+13203356186">320-335-6186</a>
     </div>
   </div>
 </footer>
+
+<style>.ah-family{max-width:1120px;margin:0 auto;padding:18px 20px 26px;font:13px/1.65 system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:inherit;opacity:.82;text-align:center;border-top:1px solid currentColor;border-top-color:rgba(127,127,127,.25)}.ah-family p{margin:.2rem 0}.ah-family a{color:inherit;text-decoration:underline;text-underline-offset:2px}.ah-family .sep{opacity:.5;margin:0 .35rem}</style>
+<div class="ah-family" aria-label="AgentHive Inc family of sites"><p><a href="https://agenthiveinc.com/">AgentHive Inc</a><span class="sep">·</span><a href="https://agenthiveinc.com/about">About Daniel Graham</a><span class="sep">·</span><a href="https://agenthiveinc.com/consult">Consult</a><span class="sep">·</span><a href="https://firstdeploy.ai/">First Deploy</a><span class="sep">·</span><a href="https://ainexus360.com/">AI Nexus 360</a><span class="sep">·</span><a href="https://infrastructure.agenthiveinc.com/">Infrastructure</a><span class="sep">·</span><a href="https://flick.firstdeploy.ai/">Flick</a><span class="sep">·</span><a href="https://jobproof.firstdeploy.ai/">JobProof</a><span class="sep">·</span><a href="https://indexme.lol/">IndexMe</a><span class="sep">·</span><a href="https://bot-lock.netlify.app/" aria-current="page">Bot Lock</a><span class="sep">·</span><a href="https://join.netlify.com/mn6b2zkzsv2b" target="_blank" rel="sponsored noopener">Hosted on Netlify</a></p><p>Built by Daniel Graham, founder of AgentHive Inc · 25 years in enterprise IT and telecom · Palm Coast, FL · <a href="tel:+13203356186">320-335-6186</a> · <a href="mailto:daniel@agenthiveinc.com">daniel@agenthiveinc.com</a></p></div>
 </body>
 </html>
