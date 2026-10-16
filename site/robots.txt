@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://clawlock-security.netlify.app/sitemap.xml
+
+Sitemap: https://bot-lock.netlify.app/sitemap.xml

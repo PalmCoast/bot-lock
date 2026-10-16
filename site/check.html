@@ -5,7 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Bot Lock Check — Interactive AI agent security self-assessment</title>
 <meta name="description" content="Free Bot Lock Check: score your AI agents against weighted themes — prompt injection, audit, least privilege, MCP supply chain, and more. Works offline in your browser." />
-<link rel="canonical" href="https://clawlock-security.netlify.app/check.html" />
+<link rel="canonical" href="https://bot-lock.netlify.app/check.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Bot Lock" />
+<meta property="og:url" content="https://bot-lock.netlify.app/check.html" />
+<meta property="og:title" content="Bot Lock Check: free AI agent security self-assessment" />
+<meta property="og:description" content="Score your AI agents against weighted themes: prompt injection, audit, least privilege, MCP supply chain. Runs in your browser." />
+<meta property="og:image" content="https://bot-lock.netlify.app/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Bot Lock: lock down what your bots can do." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Bot Lock Check: free AI agent security self-assessment" />
+<meta name="twitter:description" content="Score your AI agents against weighted themes: prompt injection, audit, least privilege, MCP supply chain. Runs in your browser." />
+<meta name="twitter:image" content="https://bot-lock.netlify.app/og.png" />
+
 <meta name="theme-color" content="#0b1220" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1220'/%3E%3Crect x='8' y='14' width='16' height='11' rx='2' fill='none' stroke='%232dd4bf' stroke-width='2'/%3E%3Cpath d='M11 14v-3a5 5 0 0 1 10 0v3' fill='none' stroke='%2338bdf8' stroke-width='2'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -121,6 +135,27 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
 .dot{width:8px;height:8px;border-radius:50%}
 @media (max-width:900px){.check-layout{grid-template-columns:1fr}.sticky-score{position:static}}
 </style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Bot Lock Check",
+ "url": "https://bot-lock.netlify.app/check.html",
+ "applicationCategory": "SecurityApplication",
+ "operatingSystem": "Web browser",
+ "description": "Free interactive AI agent security self-assessment scored from weighted themes. Works offline in your browser.",
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "AgentHive Inc",
+  "url": "https://agenthiveinc.com/"
+ }
+}
+</script>
 </head>
 <body>
 <nav>
@@ -129,9 +164,10 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
     <div class="navlinks">
       <a href="/#themes">Themes</a>
       <a href="/check.html">Check</a>
-      <a href="/playbook.html">Playbook</a>
+      <a href="/playbook-teaser">Playbook preview</a>
       <a href="/#pricing">Pricing</a>
-      <a class="btn btn-primary btn-sm" href="/#pricing">Field Kit</a>
+      <a href="/about.html">About</a>
+      <a class="btn btn-primary btn-sm" href="/#pricing">Get the Field Kit</a>
     </div>
   </div>
 </nav>
@@ -168,13 +204,15 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);f
   <div class="wrap footrow">
     <div>
       <strong style="color:var(--ink)">Bot Lock</strong> by AgentHive Inc.<br/>
-      Reduces agent risk. Not a magic guarantee.
+      Reduces agent risk. Honest controls, no magic.
     </div>
     <div>
       <a href="mailto:Daniel@agenthiveinc.com">Daniel@agenthiveinc.com</a>
     </div>
   </div>
 </footer>
+<style>.ah-family{max-width:1120px;margin:0 auto;padding:18px 20px 26px;font:13px/1.65 system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:inherit;opacity:.82;text-align:center;border-top:1px solid currentColor;border-top-color:rgba(127,127,127,.25)}.ah-family p{margin:.2rem 0}.ah-family a{color:inherit;text-decoration:underline;text-underline-offset:2px}.ah-family .sep{opacity:.5;margin:0 .35rem}</style>
+<div class="ah-family" aria-label="AgentHive Inc family of sites"><p><a href="https://agenthiveinc.com/">AgentHive Inc</a><span class="sep">·</span><a href="https://agenthiveinc.com/about">About Daniel Graham</a><span class="sep">·</span><a href="https://agenthiveinc.com/consult">Consult</a><span class="sep">·</span><a href="https://firstdeploy.ai/">First Deploy</a><span class="sep">·</span><a href="https://ainexus360.com/">AI Nexus 360</a><span class="sep">·</span><a href="https://infrastructure.agenthiveinc.com/">Infrastructure</a><span class="sep">·</span><a href="https://flick.firstdeploy.ai/">Flick</a><span class="sep">·</span><a href="https://jobproof.firstdeploy.ai/">JobProof</a><span class="sep">·</span><a href="https://indexme.lol/">IndexMe</a><span class="sep">·</span><a href="https://bot-lock.netlify.app/" aria-current="page">Bot Lock</a><span class="sep">·</span><a href="https://join.netlify.com/mn6b2zkzsv2b" target="_blank" rel="sponsored noopener">Hosted on Netlify</a></p><p>Built by Daniel Graham, founder of AgentHive Inc · 25 years in enterprise IT and telecom · Palm Coast, FL · <a href="tel:+13203356186">320-335-6186</a> · <a href="mailto:daniel@agenthiveinc.com">daniel@agenthiveinc.com</a></p></div>
 <script>
 const THEMES = [
   {

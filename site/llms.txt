@@ -1,0 +1,36 @@
+# Bot Lock
+
+> Bot Lock helps teams lock down agent and tool access — a free MIT MCP server (identity, vault, audit, policy gates), a free security Check, and the paid Field Kit and Pro playbook. Built by AgentHive Inc.
+
+Bot Lock is part of AgentHive Inc in Palm Coast, Florida. Daniel Graham embeds working AI in real operations, then leaves it running. First Deploy is the product. Consulting is how you buy time in the room. 
+## This site
+- [Bot Lock](https://bot-lock.netlify.app/): Lock down agent and tool access.
+- [About](https://bot-lock.netlify.app/about.html): Who builds Bot Lock.
+- [Bot Lock MCP server](https://github.com/PalmCoast/bot-lock/tree/main/mcp): Free, MIT. Local agent identity, vault, audit log, scope checks, kill switch.
+
+## Company
+- [AgentHive Inc](https://agenthiveinc.com/): We sit in the work, then leave it running.
+- [First Deploy](https://firstdeploy.ai/): After-hours desk and live apps for field operators.
+- [Consult](https://agenthiveinc.com/consult): Free 30-minute qualifier, then paid time.
+- [About AgentHive](https://agenthiveinc.com/about): Who we are and what we sell.
+
+## Related
+- [AgentHive Inc](https://agenthiveinc.com/): Palm Coast shop that embeds working AI, then leaves it running.
+- [First Deploy](https://firstdeploy.ai/): After-hours desk and live apps for field operators. $1,750 setup ($875 to start), then $250/month.
+- [Consult](https://agenthiveinc.com/consult): Free 30-minute qualifier, then $75 / 30 min, $150 / hour, or a 10-hour pack at $1,250.
+- [Flick](https://flick.firstdeploy.ai/): Browser screen recorder. Send a link. No login wall.
+- [JobProof](https://jobproof.firstdeploy.ai/): Proof you did the work, not a resume stack.
+- [IndexMe](https://indexme.lol/): Pay-to-stand index. Pro $19.99, Studio $29.99, one-time.
+- [TONIGHT](https://send-tonight.netlify.app/): Paste the rate. Send tonight. $19.99 one-time.
+- [RateTrap](https://ratetrap.netlify.app/): Catch the rate trap before you sign. $29.99 one-time.
+- [ClaimCash](https://getclaimcash.netlify.app/): Find unclaimed money. $5 finder.
+- [Stateside Jobs](https://stateside-jobs.netlify.app/): US-authorized jobs board.
+- [Bot Lock](https://bot-lock.netlify.app/): Lock down agent and tool access.
+- [Hire Daniel Graham](https://hire-daniel-graham.netlify.app/): AI consultant who builds. Contractor PM / FDE.
+
+## Optional
+- [About AgentHive](https://agenthiveinc.com/about): Who we are and what we sell.
+- [Hire Daniel Graham](https://hire-daniel-graham.netlify.app/): Contractor PM / FDE and AI consultant.
+
+## Preview
+- [Field Kit playbook preview](https://bot-lock.netlify.app/playbook-teaser): Table of contents and chapter 1, free.

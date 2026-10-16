@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bot Lock Field Kit Playbook: free preview (contents and chapter 1)</title>
+<meta name="description" content="Free preview of the Bot Lock Field Kit playbook for securing AI agents with tools: full table of contents and chapter 1. Field Kit $49 one-time." />
+<link rel="canonical" href="https://bot-lock.netlify.app/playbook-teaser" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Bot Lock Field Kit Playbook: free preview (contents and chapter 1)" />
+<meta property="og:description" content="Free preview of the Bot Lock Field Kit playbook for securing AI agents with tools: full table of contents and chapter 1. Field Kit $49 one-time." />
+<meta property="og:url" content="https://bot-lock.netlify.app/playbook-teaser" />
+<meta property="og:image" content="https://bot-lock.netlify.app/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Bot Lock Field Kit Playbook: free preview (contents and chapter 1)" />
+<meta name="twitter:description" content="Free preview of the Bot Lock Field Kit playbook for securing AI agents with tools: full table of contents and chapter 1. Field Kit $49 one-time." />
+<meta name="theme-color" content="#0b1220" />
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "Bot Lock Field Kit Playbook: free preview (contents and chapter 1)",
+ "description": "Free preview of the Bot Lock Field Kit playbook for securing AI agents with tools: full table of contents and chapter 1. Field Kit $49 one-time.",
+ "mainEntityOfPage": "https://bot-lock.netlify.app/playbook-teaser",
+ "datePublished": "2026-10-04",
+ "dateModified": "2026-10-04",
+ "author": {
+  "@type": "Person",
+  "name": "Daniel Graham",
+  "jobTitle": "Founder, AgentHive Inc",
+  "description": "Founder of AgentHive Inc. 25 years in enterprise IT and telecom.",
+  "worksFor": {
+   "@type": "Organization",
+   "name": "AgentHive Inc",
+   "url": "https://agenthiveinc.com/"
+  },
+  "address": {
+   "@type": "PostalAddress",
+   "addressLocality": "Palm Coast",
+   "addressRegion": "FL",
+   "addressCountry": "US"
+  },
+  "url": "https://agenthiveinc.com/about"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "AgentHive Inc",
+  "url": "https://agenthiveinc.com/"
+ },
+ "isPartOf": {
+  "@type": "Product",
+  "name": "Bot Lock Field Kit",
+  "url": "https://bot-lock.netlify.app/#pricing"
+ }
+}
+</script>
+<style>
+  :root {
+    --bg: #f7f3e8;
+    --bg-dark: #0b1220;
+    --ink: #1a2332;
+    --ink-dark: #e8eef8;
+    --muted: #5a6a7e;
+    --teal: #0f766e;
+    --teal-bright: #2dd4bf;
+    --lime: #84cc16;
+    --panel: #fffdf7;
+    --line: #d9d2c0;
+    --code-bg: #eef2f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .banner {
+    background: var(--bg-dark);
+    color: var(--ink-dark);
+    padding: 28px 24px 24px;
+    border-bottom: 3px solid var(--teal-bright);
+  }
+  .banner-inner { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--teal-bright);
+    margin: 0 0 8px;
+  }
+  .banner h1 {
+    font-family: Georgia, "Newsreader", serif;
+    font-weight: 650;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin: 0 0 10px;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .banner p { margin: 0; color: #93a4bd; font-size: .95rem; max-width: 62ch; }
+  .note {
+    max-width: 880px;
+    margin: 18px auto 0;
+    padding: 12px 14px;
+    background: rgba(45,212,191,.12);
+    border: 1px solid rgba(45,212,191,.35);
+    border-radius: 10px;
+    color: var(--ink-dark);
+    font-size: .9rem;
+  }
+  .note strong { color: var(--lime); }
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  h2 {
+    font-family: Georgia, "Newsreader", serif;
+    font-size: 1.55rem;
+    margin: 2.2em 0 .7em;
+    padding-top: .4em;
+    border-top: 1px solid var(--line);
+    color: var(--bg-dark);
+  }
+  h2:first-of-type { border-top: none; margin-top: 1em; }
+  h3 {
+    font-family: Georgia, "Newsreader", serif;
+    font-size: 1.15rem;
+    margin: 1.5em 0 .5em;
+    color: var(--teal);
+  }
+  p { margin: 0 0 1em; }
+  a { color: var(--teal); }
+  ul, ol { margin: 0 0 1em; padding-left: 1.35em; }
+  li { margin: .28em 0; }
+  blockquote {
+    margin: 0 0 1.2em;
+    padding: 12px 16px;
+    background: var(--panel);
+    border-left: 4px solid var(--teal);
+    color: var(--muted);
+  }
+  blockquote p { margin: 0; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 2em 0; }
+  code {
+    font-family: ui-monospace, "IBM Plex Mono", monospace;
+    font-size: .88em;
+    background: var(--code-bg);
+    padding: .1em .35em;
+    border-radius: 4px;
+  }
+  pre {
+    background: var(--bg-dark);
+    color: var(--ink-dark);
+    padding: 14px 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+    border: 1px solid #243552;
+    margin: 0 0 1.2em;
+  }
+  pre code {
+    background: transparent;
+    color: var(--teal-bright);
+    padding: 0;
+    font-size: .82rem;
+    line-height: 1.45;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.3em;
+    font-size: .92rem;
+    background: var(--panel);
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    background: #e8efe9;
+    color: var(--teal);
+    font-family: ui-monospace, "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .footer {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    color: var(--muted);
+    font-size: .85rem;
+  }
+  @media print {
+    :root { --bg: #fff; --panel: #fff; }
+    body { background: #fff; font-size: 11pt; }
+    .banner { background: #0b1220; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .note { break-inside: avoid; }
+    h2, h3 { break-after: avoid; }
+    pre, table, blockquote { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+    main { padding-bottom: 24px; }
+  }
+</style>
+<style>
+.topnav{max-width:880px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-size:14px}
+.topnav a{color:inherit}
+.btn-buy{display:inline-block;background:#0f766e;color:#fff;padding:11px 16px;border-radius:10px;text-decoration:none;font-weight:600;margin:4px 8px 4px 0}
+.btn-buy.alt{background:transparent;color:#0f766e;border:1px solid #0f766e}
+.buybox{margin:28px 0;padding:20px 22px;border:1px solid rgba(15,118,110,.35);border-radius:12px;background:#e6f2ef;color:#14202b}.buybox p,.buybox h2{color:#14202b}
+.preview-tag{display:inline-block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:#2dd4bf;color:#041018;padding:3px 8px;border-radius:999px}
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Main"><a href="/"><strong>Bot Lock</strong></a><a href="/#themes">Themes</a><a href="/check.html">Check</a><a href="/playbook-teaser" aria-current="page">Playbook preview</a><a href="/#pricing">Pricing</a><a href="/about.html">About</a></nav>
+  <header class="banner">
+    <div class="banner-inner">
+      <p class="kicker">AgentHive Inc. · Field Kit · Defense only</p>
+      <h1>Bot Lock Field Kit Playbook</h1>
+      <p><span class="preview-tag">Free preview</span> Table of contents and chapter 1. The full playbook comes with the Field Kit ($49 one-time) and Pro ($149 one-time).</p>
+    </div>
+  </header>
+  <main>
+<p><strong>AgentHive Inc.</strong> — Operator-dense, defense-only guidance for securing AI agents that use tools, MCP servers, and credentials.<br />
+<strong>Product:</strong> Bot Lock · <strong>Companion:</strong> Field Kit ($49 one-time) · <strong>Version:</strong> 2.1<br />
+<strong>Audience:</strong> Platform engineers, security operators, SRE/on-call, and agent owners who run production or staging agent systems they are authorized to control.</p>
+<blockquote>
+<p>This playbook designs, reviews, and verifies agent control planes. It does <strong>not</strong> provide exploit PoCs, attack payloads, bypass recipes, or unauthorized testing procedures. Authorized self-assessment themes align with Bot Lock Check. Red-team exploit reproduction is out of scope.</p>
+</blockquote>
+
+<div class="buybox">
+<h2 style="margin-top:0">Get the full playbook</h2>
+<p>Chapters 2–13 and the appendices, plus the Field Kit policy YAML templates (deny-by-default tools, MCP allowlist, secrets, kill switch).</p>
+<p><a class="btn-buy" href="https://buy.stripe.com/00weVdcf24uLbCZfKG2ZO1c">Get Field Kit · $49 one-time</a> <a class="btn-buy alt" href="https://buy.stripe.com/00w6oH1Aof9pdL7dCy2ZO1d">Get Pro · $149 one-time</a></p>
+<p style="font-size:.9rem">Stripe checkout. After payment you land on the full playbook. <a href="/#pricing">Compare Field Kit and Pro</a> · <a href="/check.html">Run the free Check first</a></p>
+</div>
+<h2 id="table-of-contents">Table of contents</h2>
+<ol>
+<li>Why this exists</li>
+<li>Core principles</li>
+<li>Threat model checklist</li>
+<li>Weighted control catalog</li>
+<li>Policy how-to (Field Kit YAML) — includes OAuth/token and exfil/I/O how-tos</li>
+<li>Kill-switch runbook</li>
+<li>Authorized verification playbook — includes drills V1–V10</li>
+<li>Anti-patterns</li>
+<li>30-day adoption / rollout plan</li>
+<li>Sample audit event shapes</li>
+<li>Incident vignettes</li>
+<li>Honest limits</li>
+<li>Product map and file map</li>
+<li>Appendices — glossary, operator card, implementation notes, tabletops, Check mapping, FAQ, <strong>weekly audit ritual</strong>, <strong>on-call card</strong>, <strong>procurement / honesty FAQ</strong></li>
+</ol>
+<hr />
+<h2 id="1-why-this-exists">1. Why this exists</h2>
+<p>AI agents that read untrusted content and call tools turn <strong>text into actions</strong>. That is the product value and the security problem in the same sentence. A support agent that can open tickets, draft replies, and look up customer records is useful until a poisoned email, a malicious PDF comment, or a compromised MCP plugin rewrites its intent and those same tools become the blast radius.</p>
+<p>Operators are already shipping agents with:</p>
+<ul>
+<li><strong>Tool access</strong> — email, calendars, browsers, shells, databases, ticketing, CI/CD, payment APIs, cloud control planes.</li>
+<li><strong>MCP and plugin ecosystems</strong> — third-party servers that extend capability without going through traditional app-sec review gates.</li>
+<li><strong>Credentials and non-human identities (NHI)</strong> — service accounts, OAuth tokens, API keys, and delegated user scopes that persist longer than any single chat turn.</li>
+<li><strong>Multi-hop context</strong> — RAG corpora, long-term memory, agent-to-agent messages, and shared session state where untrusted text can persist.</li>
+</ul>
+<p>Industry educational sources (weighted themes from English operator-facing material, Mar–Sep 2026) repeatedly surface the same failure modes. Bot Lock Check and this Field Kit playbook weight controls by how often those themes appear in that research set:</p>
+<table>
+<thead>
+<tr>
+<th>Weight</th>
+<th>Theme</th>
+<th>Operator focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16/20</td>
+<td>Prompt injection / jailbreak</td>
+<td>Untrusted text as executable influence</td>
+</tr>
+<tr>
+<td>16/20</td>
+<td>Logging / monitoring / audit</td>
+<td>Assume breach; instrument everything</td>
+</tr>
+<tr>
+<td>12/20</td>
+<td>Least privilege / IAM</td>
+<td>Task-scoped, time-bound access</td>
+</tr>
+<tr>
+<td>11/20</td>
+<td>Excessive agency</td>
+<td>Cap autonomy and blast radius</td>
+</tr>
+<tr>
+<td>11/20</td>
+<td>Agent tool abuse</td>
+<td>Tools are the new attack surface</td>
+</tr>
+<tr>
+<td>11/20</td>
+<td>Supply chain / MCP / plugins</td>
+<td>Untrusted by default</td>
+</tr>
+<tr>
+<td>10/20</td>
+<td>Secrets management</td>
+<td>Vaults, not prompts</td>
+</tr>
+<tr>
+<td>9/20</td>
+<td>Data exfiltration</td>
+<td>DLP + egress controls</td>
+</tr>
+<tr>
+<td>9/20</td>
+<td>Guardrails / I/O filtering</td>
+<td>Defense outside the model</td>
+</tr>
+<tr>
+<td>9/20</td>
+<td>Token delegation / OAuth</td>
+<td>No confused-deputy passthrough</td>
+</tr>
+</tbody>
+</table>
+<h3 id="who-this-playbook-is-for">Who this playbook is for</h3>
+<ul>
+<li><strong>Agent owners</strong> who decide which tools and credentials an agent may use for a business workflow.</li>
+<li><strong>Platform / runtime operators</strong> who load policy YAML, wire audit sinks, and run kill-switch drills.</li>
+<li><strong>Security engineers</strong> who threat-model entrances, review allowlists, and score posture with Bot Lock Check.</li>
+<li><strong>On-call responders</strong> who need a halt path that fails closed without improvising under pressure.</li>
+</ul>
+
+<div class="buybox">
+<h2 style="margin-top:0">Get the full playbook</h2>
+<p>Chapters 2–13 and the appendices, plus the Field Kit policy YAML templates (deny-by-default tools, MCP allowlist, secrets, kill switch).</p>
+<p><a class="btn-buy" href="https://buy.stripe.com/00weVdcf24uLbCZfKG2ZO1c">Get Field Kit · $49 one-time</a> <a class="btn-buy alt" href="https://buy.stripe.com/00w6oH1Aof9pdL7dCy2ZO1d">Get Pro · $149 one-time</a></p>
+<p style="font-size:.9rem">Stripe checkout. After payment you land on the full playbook. <a href="/#pricing">Compare Field Kit and Pro</a> · <a href="/check.html">Run the free Check first</a></p>
+</div>
+  </main>
+<style>.ah-family{max-width:1120px;margin:0 auto;padding:18px 20px 26px;font:13px/1.65 system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:inherit;opacity:.82;text-align:center;border-top:1px solid currentColor;border-top-color:rgba(127,127,127,.25)}.ah-family p{margin:.2rem 0}.ah-family a{color:inherit;text-decoration:underline;text-underline-offset:2px}.ah-family .sep{opacity:.5;margin:0 .35rem}</style>
+<div class="ah-family" aria-label="AgentHive Inc family of sites"><p><a href="https://agenthiveinc.com/">AgentHive Inc</a><span class="sep">·</span><a href="https://agenthiveinc.com/about">About Daniel Graham</a><span class="sep">·</span><a href="https://agenthiveinc.com/consult">Consult</a><span class="sep">·</span><a href="https://firstdeploy.ai/">First Deploy</a><span class="sep">·</span><a href="https://ainexus360.com/">AI Nexus 360</a><span class="sep">·</span><a href="https://infrastructure.agenthiveinc.com/">Infrastructure</a><span class="sep">·</span><a href="https://flick.firstdeploy.ai/">Flick</a><span class="sep">·</span><a href="https://jobproof.firstdeploy.ai/">JobProof</a><span class="sep">·</span><a href="https://indexme.lol/">IndexMe</a><span class="sep">·</span><a href="https://bot-lock.netlify.app/" aria-current="page">Bot Lock</a><span class="sep">·</span><a href="https://join.netlify.com/mn6b2zkzsv2b" target="_blank" rel="sponsored noopener">Hosted on Netlify</a></p><p>Built by Daniel Graham, founder of AgentHive Inc · 25 years in enterprise IT and telecom · Palm Coast, FL · <a href="tel:+13203356186">320-335-6186</a> · <a href="mailto:daniel@agenthiveinc.com">daniel@agenthiveinc.com</a></p></div>
+</body>
+</html>
