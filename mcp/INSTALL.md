@@ -4,6 +4,8 @@ The Bot Lock MCP server is **free and MIT-licensed**. You do not need to buy any
 
 ## 1. Build
 
+The npm package is coming soon (not published yet). Until then, build from the GitHub repo:
+
 ```bash
 git clone https://github.com/PalmCoast/bot-lock.git
 cd bot-lock/mcp

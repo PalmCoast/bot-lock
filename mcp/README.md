@@ -20,8 +20,11 @@ State lives in `$BOTLOCK_HOME/state.json` (default `~/.botlock/state.json`), mod
 
 ## Install
 
+The npm package is coming soon; it is not published yet, so `npx bot-lock-mcp` will not work. Install from the GitHub repo:
+
 ```bash
-cd mcp
+git clone https://github.com/PalmCoast/bot-lock.git
+cd bot-lock/mcp
 npm install
 npm test
 npm run build
